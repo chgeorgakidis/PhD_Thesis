@@ -1,0 +1,12 @@
+% !TEX root = ThesisGchatzi.tex
+
+\graphicspath{{Papers/SpringerJournalOfBigData/}}
+
+\section{Summary}
+\label{sec:concl_knn}
+
+In this chapter, we have presented a novel distributed processing framework, which supports a probabilistic classification and a regression approach. Its core algorithm is an extension of a distributed approximate $k$NN implementation, optimized to operate efficiently in a single distributed session. It was implemented with the Apache Flink scalable data processing engine.
+
+We have conducted a detailed experimental evaluation in order to assess the framework in terms of wall-clock completion time and scalability, comparing it with similar approaches based on Apache Spark and Apache Hadoop. Our framework outperformed all competing implementations, managing to execute significantly faster on the same workloads and scale better for larger datasets, as a result of our optimizations and its ability to execute in a single distributed session. Furthermore, we performed two water consumption related real-world case studies, demonstrating our framework's potential in knowledge extraction tasks on data of very high volume.
+
+The next chapter concludes this thesis and presents possible future directions.

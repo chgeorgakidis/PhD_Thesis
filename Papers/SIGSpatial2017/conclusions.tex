@@ -1,0 +1,4 @@
+\subsection{Conclusions and Future Work}
+\label{sec:conclusions}
+
+In this paper, we have addressed the problem of indexing geolocated time series data. Our hybrid \tsr index enhances the R-tree by augmenting the spatial bounds in its nodes with respective time series bounds. We have also presented an optimized variant, the \ctsr, which maintains tighter time series bounds in each node by bundling similar time series together. Our experiments on diverse real-world datasets from different domains show that the proposed indices significantly improve performance when evaluating hybrid queries combining boolean and/or top-$k$ filtering on both spatial proximity and time series similarity. In the future, we plan to expand this indexing on multi-dimensional feature spaces over distributed processing frameworks and also explore adaptivity to query workloads. 

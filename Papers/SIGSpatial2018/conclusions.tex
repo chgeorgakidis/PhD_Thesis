@@ -1,0 +1,4 @@
+\subsection{Conclusions}
+\label{sec:conclusions}
+
+In this paper, we addressed the problem of hybrid similarity joins over geolocated time series according to both their spatial proximity and time series similarity. Our approach takes advantage of different state-of-the-art indexing schemes to design an efficient algorithm for query evaluation. Given that scalability is a bottleneck in such centralized settings, we show how a space-driven partitioning can be employed to deal with much larger datasets in cluster environments. Our parallel and distributed method can efficiently execute similarity joins per partition locally, while also minimizing the amount of data shuffled between processing nodes. Our empirical results against synthetic datasets of varying sizes confirm the efficiency and effectiveness of our algorithms.

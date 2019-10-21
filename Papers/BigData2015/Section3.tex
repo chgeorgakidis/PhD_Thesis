@@ -1,0 +1,45 @@
+\subsection{Preliminaries} 
+\label{sec:preliminaries}
+In order to efficiently extract valuable knowledge from a huge volume of water consumption data, we apply classification and exploit the MapReduce programming model. In the following, we present some key ideas that our approach brings together.
+
+\subsection{Problem Definition}
+\label{subsec:problem_definition}
+Classification is applied in order to determine in which class of labelled elements a new observation belongs to. A $k$-NN classifier is responsible for obtaining the dominant among the $k$-Nearest Neighbours' classes. To achieve that, we apply a weighted voting scheme and we calculate a probability to each one of the candidate classes.
+
+Let us consider the set of the $k$-NN as $X = \{x_{1}^{NN}, x_{2}^{NN}, ...., x_{k}^{NN}\}$ and the class of each one as a set $C = \{c_{1}^{NN}, c_{2}^{NN}, ..., c_{k}^{NN}\}$. The weight of each nearest neighbour is calculated as follows:
+
+\begin{equation} \label{eq:1}
+	w_{i} = \left\{
+		\begin{array}{lr}
+			\frac{d_{k}^{NN} - d_{i}^{NN}}{d_{k}^{NN} - d_{1}^{NN}} & : d_{k}^{NN} \neq d_{1}^{NN}\\
+			1 & : d_{k}^{NN} = d_{1}^{NN}
+		\end{array}
+	\right., \quad i=1, ..., k
+\end{equation}
+where $d_{1}^{NN}$ is the distance of the query element to the closest neighbour, $d_{i}^{NN}$ and $d_{k}^{NN}$ its distance to the $i$-th and the furthest nearest neighbour respectively. Thus, the nominator of Equation~\ref{eq:1} expresses the distance difference of the furthest neighbour from the $i$-th neighbour, while similarly, the denominator expresses the distance difference of the furthest neighbour from the closest neighbour to the query element. By this calculation, the closest neighbours will be assigned a greater weight. 
+
+Let $P = \{p_{j}\}_{j=1}^{l}$ be a set containing each probability class, where $l$ is the number of classes. The probability of each class is the sum of the weights of the similarly labelled nearest neighbours, divided by the total weight of the nearest neighbours and is derived as follows:
+
+\begin{equation} \label{eq:2}
+	p_{j} = \frac{\sum_{i=1}^{k} w_{i} \cdot I(c_{j} = c_{i}^{NN})}{\sum_{i=1}^{k} w_{i}}, \quad j=1, ..., l
+\end{equation}
+where $I(c_{j} = c_{i}^{NN})$ is a function which takes the value 1 if the class of the neighbour $x_{i}^{NN}$ is equal to $c_{j}$. 
+
+Finally, the element will be classified as the class with the highest probability, according to the following formula:
+
+\begin{equation} \label{eq:3}
+	c_{r} = \arg \max_{c_{j}} P, \quad j=1, ...., l
+\end{equation}
+where $c_{r}$ is the resulting class.
+
+\subsection{The H-zkNN Algorithm}
+\label{subsec:hzknn}
+The H-zkNN algorithm is a Hadoop based implementation of the $k$-NN, which operates in three separate sessions and overcomes the complexity issues arising from huge amounts of data. It applies dimensionality reduction on the $R$ and $S$ datasets and efficiently splits the work among several machines. 
+
+Similar approaches partition the datasets in $n$ blocks, thus requiring $n^2$ reducers to calculate each element's nearest neighbours, due to the fact that every possible pair of blocks has to be evaluated. The H-zkNN algorithm overcomes the problem of data partitioning by adopting a sampling approach on $R$ and $S$ datasets. This way, the sampled data can be easily sorted, allowing for partitioning ranges to be determined. Consequently, the reducers can receive subsets of $R$ and $S$ only in a specific range. This task requires only $n$ reducers to perform the calculations instead of $n^2$ that would be needed in order to evaluate every possible pair of blocks. 
+
+Regarding the dimensionality reduction, the H-zkNN algorithm calculates the $z$-order curve of the input elements, in order to significantly reduce the complexity of the calculations. It does so by interleaving the binary codes of an element's dimensions, which takes place starting from the most significant bit (MSB) towards the least significant (LSB). For example, the $z$-value of a 3-dimensional element with feature values 3 ($011_2$), 4 ($100_2$) and 5 ($110_2$), can be formed by first interleaving the MSB of each number (0, 1 and 1) going towards the LSB, thus forming a final value of $011101100_2$. This procedure does not require any costly CPU execution. 
+
+Figure~\ref{fig:z_order}a shows how the $z$-order curve fills a two-dimensional space from the smallest $z$-value to the largest. It can be noticed that some elements are falsely calculated being closer than others, as the curve scans them first. This in turn creates an impact on the result's precision. The H-zkNN method addresses this by shifting all the elements by randomly generated vectors and repeating the procedure using the shifted values, thus compensating part of the lost precision through scanning the space in an altered sequence. This is demonstrated in Figure~\ref{fig:z_order}b. The four bottom-left elements are shifted twice in the x-axis and once in the y-axis, altering the sequence in which they are scanned by the $z$-order curve. Consequently, taking under consideration nearest neighbours of a point from shifted datasets, one can obtain elements that are close to it, but had been missed by the un-shifted curve. The main drawback of this approach is the fact that it has to be executed multiple times, one for each chosen shift.
+
+The H-zkNN algorithm operates in three separate MapReduce stages each requiring the initiation of a new Hadoop session. Alternatively, the F-zkNN classifier combines the three stages into a single Flink session. In the following section, our approach is presented in more details.

@@ -1,0 +1,120 @@
+% !TEX root = ThesisGchatzi.tex
+
+\chapter{Introduction} \label{chap:intro}
+
+\section{Concept and Motivation}
+\label{subsec:conept_motivation}
+
+Time series data is a treasure trove for a variety of mining and monitoring applications both in industry and in academia, while a rapidly increasing bulk of such data is also generated on the Web and the Internet of Things. They can represent various types of measurements, such as user check-ins at various Points of Interest, energy consumption in smart buildings, PM2.5 particle concentration measured by air pollution sensors, etc. A time series is a time-ordered sequence of values. Figure~\ref{subfig:time_series} depicts such an example. A real-world example of two time series representing the total per-hour water consumption during a specific day of two separate regions within a city, is illustrated in Figure~\ref{subfig:water_ts}. Tasks such as exploring and mining time series data are highly important for discovering trends or patterns and extracting useful insights from such phenomena, having attracted extensive research interest over the last years \cite{DBLP:journals/pvldb/EchihabiZPB18,DBLP:conf/sigmod/LinardiZPK18a,DBLP:journals/datamine/YehZUBDDZSMK18,camerra2014kais,ding2008pvldb,shieh2008kdd}.
+
+\begin{figure}[!ht]
+ \centering
+ \subfloat[A simple time series example.]{\includegraphics[width=0.4\textwidth]{time_series.png}\label{subfig:time_series}}
+ \subfloat[Water consumption-related time series.]{\includegraphics[width=0.5\textwidth]{water_ts.png}\label{subfig:water_ts}}
+\caption{Examples of time series.}
+\label{fig:ts_examples}
+\end{figure}
+
+As an example of time series exploration, consider a large set of daily water consumption time series of a region within a city measured per hour, as the ones depicted in Figure~\ref{subfig:water_ts}. Given a new time series, one could require to obtain the most similar one from the dataset, to detect days of similar consumption. However, looping over all time series in the dataset and comparing similarities could be rather slow. To speed things up, we could build an \textit{index} using all the time series in the dataset and then perform a similarity query on it. Several approaches have been proposed for efficiently indexing large amounts of time series data. One well-studied family of approaches includes wavelet-based methods \cite{chan1999icde}, which rely on \textit{Discrete Wavelet Transform} \cite{graps1995cse} to reduce the dimensionality of time series and generate an index using the coefficients of the transformed sequences. Another line of work employs a \textit{Symbolic Aggregate Approximation} (SAX) representation of time series \cite{jessica2007dmkd}, introducing a series of indices, such as $i$SAX~\cite{shieh2008kdd}, $i$SAX 2.0~\cite{camerra2010icdm}, $i$SAX2+~\cite{camerra2014kais}, and ADS+~\cite{zoumpatianos2014sigmod}.
+
+However, to the best of our knowledge, none of the existing works so far has considered the specific case of \textit{geolocated time series} (i.e., produced at, or otherwise associated with, specific locations). Figure~\ref{subfig:geoTS} depicts a set of geolocated time series on a map. Geolocated time series can be found in various domains and applications. For instance, time series can be used to represent, analyze and forecast water consumption measured by smart meters installed in urban households \cite{DBLP:conf/edbt/ChronisGA16}. Analyzing such time series can provide valuable insights regarding trends and patterns of consumer behavior in daily life. These results can then be used for customer segmentation, targeted marketing, planning future network upgrades, forecasting and balancing water demand, as well as planning and prioritizing interventions that can guide consumers towards more sensible water use. Similarly, check-ins in geosocial networks can also be modeled as geolocated time series. Analysis results can indicate nearby venues with similar frequency patterns, which may be used for social recommendations according to time, place, activity, etc. Other use cases can be found in other domains, such as in geomarketing or mobile advertisement, where geolocated time series may represent the number of visitors or the revenue generated at a certain location across time.
+
+\begin{figure}[!ht]
+ \centering
+ \subfloat[Geolocated time series.]{\includegraphics[width=0.4\textwidth]{geoTS.png}\label{subfig:geoTS}} \quad
+ \subfloat[A query on geolocated time series.]{\includegraphics[width=0.4\textwidth]{geoTS_query.png}\label{subfig:geoTS_query}}
+\caption{Examples of geolocated time series.}
+\label{fig:geoTS_examples}
+\end{figure}
+
+As an example, given the set shown in Figure~\ref{subfig:geoTS} and a query geolocated time series, one could request all similar ones in the time domain that are also spatially close, as illustrated in Figure~\ref{subfig:geoTS_query}. All aforementioned indices aim at efficiently supporting similarity search; in case that the analyzed time series are associated with a spatial attribute and issued queries involve spatial filters, these need to be treated independently. Thus, for queries employing both types of predicates, this implies evaluating each predicate separately. This can be done by first using a time series index to retrieve similar time series and then applying the spatial predicate on the results, or vice versa, by employing a spatial index to evaluate the spatial predicate and then filter the results according to their similarity with the query time series. Formally, geolocated time series can be defined as follows.
+
+\begin{mydefinition} [Geolocated Time Series]
+A {\em time series} is a time-ordered sequence of values $T = \{v_1, \ldots, v_w\}$, where $v_i$ is the value at the $i$-th time point and $w$ is the length of the series. A time series is \textit{geolocated} if it is also characterized by a location, denoted by $T.loc$. Assuming a 2-dimensional space, $T.loc_x$, $T.loc_y$ refer to the $(x,y)$ coordinates of $T$'s location.
+\end{mydefinition}
+
+Due to the rather complex nature of time series data, in conjunction with the extra spatial characteristics, such analysis tasks can be a rather slow and cumbersome procedure. To make such applications more efficient and scalable, geolocated time series need to be appropriately \textit{indexed} to allow executing hybrid queries based on both \textit{spatial proximity} and \textit{time series similarity}, enhancing the pruning potential. In this thesis, we present novel approaches for efficient indexing, exploration and mining of large volumes of geolocated, as well as plain time series data. Then, we take it a step further by focusing on distributed joint forecasting on massive sets of time series.
+
+\section{Challenges and Contributions}
+\label{subsec:challenge_contrib}
+
+\paragraph{Hybrid Indexing and Querying on Geolocated Time Series.} In this Thesis, we introduce a \textit{hybrid index} for efficiently supporting similarity search on geolocated time series combining both spatial proximity and time series similarity. The proposed index, called \textit{\tsr}, extends the R-tree by introducing appropriate bounds for the time series indexed at each node. This reduces node accesses during query evaluation by simultaneously pruning the search space in the spatial domain and the time series domain while traversing the index. We also present an optimized version, the \btsr, which uses tighter bounds by bundling together similar time series in each node. We describe how these indices can be used to efficiently evaluate different variants of hybrid queries combining spatial and time series filtering or ranking.
+
+In the same line of work, we introduce a new type of hybrid query that applies hybrid \textit{similarity join} on very large sets of geolocated time series. A hybrid similarity join query aims to identify \textit{all pairs} between the two datasets qualifying to the criteria of \textit{spatial proximity} and \textit{time series similarity}. Clearly, performing a pairwise comparison among all pairs of objects in the two datasets is not an option when their size is large. Hence, indexing them is indispensable for efficient processing of such queries. In this work, we take advantage of the \btsr's hybrid pruning potential, to deliver a more efficient and faster hybrid similarity join evaluation compared to other, adapted, state-of-the-art indices. However, this {\em centralized} approach has certain limitations, as it cannot sustain examination of large datasets. Hence, we further suggest a space-driven data partitioning scheme that enables a \textit{parallel and distributed} approach for hybrid similarity joins.
+
+In summary, in the fields of hybrid indexing and querying on geolocated tome series, our work makes the following contributions:
+
+\begin{itemize}
+ \item We propose the \tsr, a hybrid index for geolocated time series, extending the spatial R-tree and augmenting each node with appropriate time series bounds.
+ \item We further optimize the \tsr to derive a more efficient variant, the \btsr, that clusters the time series of each subtree to derive and maintain tighter bounds for pruning.
+ \item We address the problem of similarity search for geolocated time series, via hybrid boolean or top-$k$ queries combining both spatial proximity and time series similarity.
+ \item We adapt state-of-the-art indices (including the \btsr index) for hybrid similarity join over geolocated time series data in centralized settings and propose traversal methods that can prune the search space and return answers without false misses.
+ \item We suggest a space-driven partitioning method to distribute large datasets in cluster infrastructures, thus enabling faster, in-parallel evaluation of smaller similarity join tasks.
+ \item We experimentally validate our proposed approach using real-world datasets from different application use cases, showing that our hybrid indices can effectively allow simultaneous pruning of the search space in both spatial and time series domains, significantly reducing the required number of node accesses and execution time.
+\end{itemize}
+
+The above results are published at the International Conference on Advances in Geographic Information Systems (SIGSPATIAL) 2017~\cite{chatzig17btsr} and 2018~\cite{chatzigeorgakidis2018scalable}.
+
+%%%%%%%% VISUALIZATION
+\paragraph{Visual Exploration of Geolocated Time Series.} Extracting insights, trends and patterns from large geolocated time series datasets can be significantly facilitated by \textit{map-based visualizations} of \textit{summarized} time series data. For instance, considering the scenario of water consumption measured by smart meters installed in urban households, such visualizations could reveal which type of consumption patterns are most frequently observed among consumers in a certain area, or what the spatial distribution of sales for a certain product looks like. However, the inherently complex nature of time series, combined with the extremely large volumes of such datasets, incommodes their management, analysis and exploration. In particular, visual exploration of geolocated time series needs to process the required information efficiently, while the user interacts with the application. For example, whenever the user zooms in or scrolls the map, visual analytics and aggregates should be computed on-the-fly, e.g., identifying the predominant patterns in the time series and their spatial distribution within the actual map area.
+
+In this Thesis, we propose two geolocated time series summarization approaches for visual exploration, named \textit{bundle} and \textit{tile map summary}. These are supported and driven by two \textit{hybrid} indices that speed up the result computation, providing efficient exploration of geolocated time series data. They consist of a spatial and a time series summary that jointly facilitate knowledge extraction and insight gaining. To the best of our knowledge, this is the first work that considers visual exploration and summarization of geolocated time series. In brief, our main contributions on this field are the following:
+
+\begin{itemize}
+ \item We suggest an adapted variant of the \btsr index, as well as a novel algorithm for its traversal in order to quickly retrieve summaries (a.k.a. bundles) of geolocated time series within a given spatial area.
+ \item We propose a hybrid variant of the \isax index, called \hisax, which combines time series with spatial information within its nodes. Based on that, we describe a novel traversal algorithm for \hisax that enables fast timebox search by performing efficient pruning, while avoiding false negatives.
+ \item We exemplify the proposed visualization methods with two use cases based on real-world datasets. In addition, we empirically evaluate the performance of our summarization methods, confirming their low execution time against a large synthetic dataset of geolocated time series.
+\end{itemize}
+
+A preliminary version of the above results appear at the BigVis workshop, which was held in conjunction with EDBT/ICDT 2018 joint conference~\cite{chatzigeorgakidis2018map}. The complete work is published at the Elsevier Big Data Research journal~\cite{chatzigeorgakidis2019visual} in 2019; 
+
+%%%%%%%% LOCAL SIMILARITY
+\paragraph{Local Similarity Search.} Most time series similarity measures, such as \textit{Euclidean distance} and \textit{Dynamic Time Warping} (DTW) are globally calculated, i.e., across the entire length of time series. In this Thesis, we introduce the measure of \textit{local similarity}, that can be applied on co-evolving (i.e., time aligned) time series. We consider the problem of detecting locally similar pairs and groups, called bundles. These are pairs or groups of subsequences whose values do not differ by more than $\epsilon$ for at least $\delta$ consecutive timestamps, thus indicating common local patterns and trends. We first present a baseline algorithm that performs a sweep line scan across all timestamps to identify matches. Then, we propose a filter-verification technique that only examines candidate matches at judiciously chosen checkpoints across time. Specifically, we introduce two block scanning algorithms for discovering local pairs and bundles respectively, which leverage the potential of checkpoints to aggressively prune the search space.
+
+%we introduce the measure of \textit{local similarity}, that can be applied on co-evolving (i.e., time aligned) time series. Two co-evolving time series are locally similar if the pairwise distance of their values per timestamp does not exceed a given threshold during a time interval, that lasts at least a pre-defined number of consecutive timestamps. Based on this new similarity measure, we introduce two novel approaches for efficiently detecting all possible pairs and \textit{bundles} (groups) of time series that are locally similar within a given dataset. Discovering such pairs and bundles can be useful in various applications. For instance, public utility companies employ smart meters to collect time series measuring consumption per household (e.g., for water or electricity). Identifying such bundles of time series (i.e., a number of similar subsequences over certain time intervals) can reveal similar patterns of consumption among users, allowing for more personalized billing schemes. In finance, examining time series of stock prices can identify pairs or bundles of stocks trending similarly at competitive prices over some trading period, hence offering precious insight for possible future investments.
+
+%Pair and bundle discovery can be a computationally expensive process, as it requires detecting and validating all possible candidates throughout the duration of a co-evolving time series dataset. In this Thesis, we employ a value discretization approach that divides the value axis in ranges equal to the value difference threshold, in order to reduce the number of candidate pairs or bundles that need to be checked per timestamp. Leveraging this, we first propose two \textit{sweep line} scan algorithms, for pair and bundle discovery respectively, which operate according to the aforementioned filter-verification strategy. However, this process still incurs an excessive amount of comparisons, as it needs to scan all values at every timestamp. To overcome this, we introduce a more aggressive filtering that only checks at selected \textit{checkpoints} across time, but ensuring that no false negatives ever occur. This approach incurs significant savings in computation cost, as we only need to examine candidate matches on those checkpoints, instead of all timestamps. To further reduce the number of examined candidates, we propose a strategy that judiciously places these checkpoints across the time axis in a more efficient manner. We then exploit these optimizations introducing two more efficient algorithms that significantly reduce the execution cost for both pair and bundle discovery.
+
+In the same line of work, we tackle the problem of similarity search on geolocated time series data, using local similarity. Our approach for hybrid search over geolocated time series using the \btsr supports only \textit{global} geolocated time series similarity. It turns out that such hybrid queries involving local similarity can still be evaluated using the \btsr index. We first present a baseline method employing a sweep-line algorithm to check for local similarity, and then describe how this can be optimized by using appropriately placed checkpoints, based on the local similarity score threshold specified by the query, in order to skip unnecessary comparisons. Despite the fact that this saves some computations, the resulting time savings are relatively small, since the number of index nodes that need to be probed is not essentially reduced. To overcome this problem, we introduce an improvement to the \btsr index, which is based on temporally segmenting the time series bounds within each node and deriving tighter bounds per segment. Once the time series bounds in each node become more fine-grained, pruning the search space for local similarity queries proves much more effective.
+
+%Contribution
+Our main contributions on pair/bundle discovery and local similarity search can be summarized as follows:
+
+\begin{itemize} 
+ \item We introduce the problems of local pair and bundle discovery over co-evolving time series.
+ \item We suggest an aggressive checkpoint-based pruning method that drastically reduces the candidate pairs and bundles that need to be verified, significantly improving performance.
+ \item We conduct an extensive experimental evaluation using both real-world and synthetic time series, showing that our algorithms outperform the respective sweep line baselines.
+ \item We extend our previous work on hybrid queries for geolocated time series to support local time series similarity. We consider both range and top-$k$ queries, including combined criteria for spatial distance and local time series distance.
+ \item We present how such queries can be answered efficiently exploiting the previously introduced \btsr index.
+ \item To achieve greater savings in execution time by further reducing node accesses, we propose an enhanced variant of \btsr, called \sbtsr, which additionally employs temporal segmentation in each node to derive tighter, more fine-grained time series bounds.
+ \item We experimentally evaluate our methods using real-world datasets from different application domains, showing that \btsr can efficiently handle hybrid queries under local similarity search, while \sbtsr achieves even higher performance due to the additional temporal segmentation.
+\end{itemize}
+
+The above results are published at the 16th International Symposium on Spatial and Temporal Databases (SSTD) 2019~\cite{chatzigeorgakidis2019local} and at the International Conference on Advances in Geographic Information Systems (SIGSPATIAL) 2019~\cite{chatzigeorgakidis2019geolocal}.
+
+\paragraph{Scalable Time Series Forecasting.} Forecasting time series is crucially useful in various applications, such as resource demand management (e.g., water, electricity, natural gas), stock market and supply demand forecasting (e.g., in super markets). Depending on the dataset, it can be a rather complex and computationally intensive task due to the high dimensionality and usual uncertainty in such data. In this Thesis, we introduce a framework for scalable data analysis on Big Data collections, named \textit{Flink Machine Learning $k$-Nearest Neighbors} (FML-$k$NN for short). The framework implements a probabilistic classifier and a regressor. Its core algorithm is an extension of F-$zk$NN~\cite{chatzigeorgakidis2015mapreduce}, which is built upon an optimized version of the H-$zk$NNJ~\cite{zhang2012epk} distributed approximate $k$NN join algorithm. We showcase the framework's capabilities through a large scale time series forecasting use case on a large real-world dataset of hourly water consumption per household within a city.
+
+The overall contributions of our work on FML-$k$NN are the following:
+\begin{itemize}
+	\item We propose a novel, easily extensible distributed processing framework that performs probabilistic classification and regression using $k$NN join.
+	\item The framework operates in a single distributed session, saving I/O and communication resources. Similar approaches require three distributed sessions.
+	\item We present a detailed experimental and comparative evaluation with similar approaches and exhibit our framework's efficiency in terms of scalability and wall-clock completion time.
+	\item We conduct experiments on two real-world cases using water consumption related datasets and extract useful knowledge and insights towards the induction of more efficient water use.
+\end{itemize}
+
+A preliminary version of these results appear at the 2015 IEEE International Conference on Big Data (BigData)~\cite{chatzigeorgakidis2015mapreduce}. The complete work is published at the Springer Journal of Big Data~\cite{chatzigeorgakidis2018fml} in 2018; 
+
+\section{Organization}
+\label{sec:org}
+
+The rest of this Thesis is structured as follows:
+
+\begin{description}
+	\item Chapter~\ref{chap:related} surveys the related work in the field of time series indexing, querying, exploration and similarity search, as well as scalable $k$NN methods and machine learning.
+	\item Chapter~\ref{chap:btsr} presents our hybrid \btsr index, that indexes geolocated time series both in the spatial and in the time series domain.
+	\item Chapter~\ref{chap:btsr_queries} extends the work of Chapter~\ref{chap:btsr}, introducing a variety of hybrid queries that can be processed using the \btsr index.
+	\item Chapter~\ref{chap:vis} considers an efficient exploration on large geolocated time series data, using hybrid indexing.
+	\item Chapter~\ref{chap:local_sim} introduces the pair and bundle discovery on large co-evolving time series datasets based on local similarity. It also presents a new collection of hybrid local similarity search queries, using hybrid indexing.
+	\item Chapter~\ref{chap:knn} considers scalable $k$NN joins and presents our FML-$k$NN framework for classification and regression on Big Data.
+	\item Chapter~\ref{chap:conclusions} concludes this Thesis and presents future work directions.
+\end{description}

@@ -1,0 +1,55 @@
+\subsection{Related Work}
+\label{sec:related}
+
+%In this section, we first present an overview of related work on time series indexing and then we discuss hybrid spatio-textual indices.
+
+%\subsection{Time Series Indexing}
+%\label{subsec:related_ts}
+
+\noindent \emph{Time Series Indexing.} Earlier approaches towards indexing time series data were based on leveraging multi-resolution representations. For instance, the Discrete Wavelet Transform \cite{graps1995cse} is used in \cite{chan1999icde} to gradually reduce the dimensionality of time series data via the \emph{Haar wavelet} \cite{haar1910theorie} and generate an index using the coefficients of the transformed sequences. In \cite{popivanov2002icde}, it is further observed that, other than orthonormal wavelets, bi-orthonormal ones can also be used for efficient similarity search over wavelet-indexed time series data, demonstrating several such wavelets that outperform the Haar wavelet in terms of precision and performance. In addition, an alternative approach to the $k$-nearest neighbor search over time series data is introduced in \cite{kashyap2011kdd}. The proposed method accesses the coefficients of Haar-wavelet-transformed time series through a sequential scan over step-wise increasing resolutions.
+
+%Contrary to all the above approaches, which utilize multi-resolution representations in order to index plain time series data, our approach uses a simple and fast dimensionality reduction approach in conjunction with a spatial index, in order to index hybrid time-series data and provide wide, efficiently pruned, querying options. Also, the fixed size of information that each node contains, facilitates a disk-resident implementation.
+
+State-of-the-art approaches for time series indexing comprise methods based on the {\em Symbolic Aggregate Approximation} (SAX) representation \cite{jessica2007dmkd}. This is derived from the {\em Piecewise Aggregate Approximation} (PAA) representation of a time series \cite{keogh2001paa,faloutsos2000vldb}, by quantizing the segments of its PAA representation on the $y$-axis. The first attempt to leverage the potential of the SAX representation was presented in \cite{shieh2008kdd}, introducing the indexable Symbolic Aggregate Approximation ($i$SAX), capable of a multi-resolution representation for time series. The iSAX index was further extended to $i$SAX 2.0 in \cite{camerra2010icdm} by enabling bulk loading of time series data. Its next version is the $i$SAX2+ index \cite{camerra2014kais}, which handles better the expensive I/O operations caused by the aggressive node splitting while building the index. Finally, the ADS+ index \cite{zoumpatianos2014sigmod} is another extension of $i$SAX, which attempts to overcome the still significantly expensive index build time by adaptively building the index while processing the workload of queries issued by the user. A comprehensive overview and comparison of the time series indexing approaches based on the SAX representation is presented in \cite{palpanas2016bigsm}.
+
+However, none of the above approaches supports geolocated time series, and thus cannot efficiently process hybrid queries combining time series similarity with spatial proximity.
+
+%\mnote{condense for brevity} However, none of the above approaches has considered the case of geolocated time series indexing, supporting hybrid queries that combine spatial proximity with time series similarity. In this paper, we present a spatial-first approach, that extends a spatial index, specifically the ubiquitous R-tree, to allow for time series similarity search in spatial queries.
+
+
+%Palpanas summarizes the work on indexing using SAX representation in \cite{palpanas2016bigsm}, where he concludes that the currently available tools regarding time-series management should be integrated in a general-purpose \textit{Sequence Management System}, able to effectively and efficiently store and process such data.
+
+
+
+%\subsection{Spatio-Textual Indices}
+%\label{subsec:related_st}
+
+\vspace{2mm}
+
+\noindent \emph{Spatio-Textual Indices.} There is an increasing amount of spatio-textual objects, e.g., Points of Interest (PoI) with textual descriptions, geotagged tweets or posts in social media, etc. This has motivated research on hybrid spatial-keyword queries combining location-based predicates with keyword search. Main query types include the \emph{Boolean Range Query}, which retrieves all objects that contain a given set of keywords and are located within a specified spatial range; the \emph{Boolean $k$NN Query}, which returns the $k$ nearest objects to a specific location and contain the given keywords; and the \emph{Top-$k$ $k$NN Query}, which finds the top-$k$ objects according to an objective function that assigns hybrid scores to objects based on both their keyword similarity and spatial proximity to the query object \cite{chen2013pvldb}.
+
+To evaluate such queries efficiently, the main idea is to construct hybrid index structures that simultaneously partition the data in both dimensions, spatial and textual. Essentially, this implies combining a spatial index structure (e.g., R-tree, Quadtree, Space-Filling Curve) with a textual index (e.g., inverted file, signature file). Depending on their form, the resulting variants can be characterized either as {\em spatial-first} or {\em textual-first} indices \cite{christoforaki2011cikm}. One of the most fundamental and characteristic ones is the IR-tree \cite{cong2009vldb,zhisheng2011tkde}, which extends the R-tree by augmenting the contents of each node with a pointer to an inverted file indexing terms and documents contained in its sub-tree. Several other hybrid spatio-textual indices extending the R-tree (or R$^*$-tree) have been proposed, such as the IR$^2$-tree \cite{defelipe2008icde}, the KR$^*$-Tree \cite{hariharan2007ssdbm}, SKI \cite{cary2010ssdbm} and S2I \cite{rocha2011ssd}, while methods based on space filling curves include SF2I \cite{chen2006sigmod} and SFC-QUAD \cite{christoforaki2011cikm}.
+
+Our approach is based on the R-tree \cite{Guttman1984} for the spatial indexing part. Recall that an R-tree organizes a hierarchy of nested $d$-dimensional rectangles. Each node corresponds to a disk page and represents the MBR of its children or, for leaf nodes, the MBR of its contained geometries. The number of entries per node (excluding the root) is between a lower bound $m$ and a maximum capacity $M$. Query execution in R-trees starts from the root. MBRs in any visited node are tested for intersection against a search region. Qualifying entries are recursively visited until the leaf level or until no further overlaps are found. Several paths may be probed, because multiple sibling entries could overlap with the search region.
+
+All aforementioned approaches focus exclusively on combining spatial queries with keyword search. To the best of our knowledge, our work is the first one to address geolocated time series, combining spatial queries with similarity search for time series.
+
+%\mnote{condense for brevity} All the aforementioned approaches have focused exclusively on combining spatial queries with keyword search. To the best of our knowledge, our work is the first one to address the case of geolocated time series, combining spatial queries with similarity search for time series.
+
+
+%\vspace{20pt}
+
+%==========
+
+%Cary et al. \cite{cary2010ssdbm} follow a similar approach that uses the terms' \textit{bitmaps} instead of the documents themselves in the inverted file. In \cite{defelipe2008icde}, the authors introduce the \textit{IR$^2$-Tree}, which stores bitmap-formed signature files in each node, being the union of all the signatures (i.e., vectors indicating whether a word exists or not) in its sub-trees. Zhou et al. \cite{zhou2005cikm}, utilize an R$^*$-Tree combined with inverted file, to deliver all three different combining schemes, i.e., text-first, spatial-first and hybrid. Finally, Hariharan et al. \cite{hariharan2007ssdbm} introduce \textit{KR$^*$-Tree}, that augments the R$^*$-Tree's nodes with a set of distinct keywords that appear in the space covered by their sub-trees, in order to prune both space and text simultaneously.
+
+%A downside of all the aforementioned approaches is that, in order to support efficient pruning, they aggressively augment the information that is kept within the nodes. Also, this information varies from node to node, incommoding efficient disk-resident implementations.
+
+%Other hybrid indexing approaches, that do not utilize the R-Tree or R$^*$-Tree for indexing the spatial part of the data, include \cite{christoforaki2011cikm}, which introduces three improved (over several baselines) algorithms, named \textit{Coarse Space Partitioning}, \textit{SFC-QUAD} and \textit{SFC-SKIP}. The first method coarsely partitions the geographic space in a way that each partition approximately contains the same number of documents, which are then indexed using inverted lists. Boolean range queries can be thus, executed by first detecting the intersecting spatial regions and then querying the corresponding inverted lists. SFC-QUAD prunes Boolean range queries by utilizing a \textit{quad-tree} over the textual domain, after labeling each element via a \textit{Space-Filling Curve} calculated on the spatial data. Finally, SFC-SKIP adds \textit{Minimum Bounding Rectangle} (MBR) information on the inverted lists to further support pruning.
+
+%In \cite{chen2006sigmod}, Chen et al. also present three improved spatio-textual indexing algorithms, including \textit{$k$-Sweep}, that uses \textit{toeprints} (i.e., partitions of an MBR into a number of disjoint areas) of the data on an in-memory grid-based spatial structure, \textit{Tile Index}, which improves $k$-Sweep by adding intersecting toeprint IDs in each tile and \textit{Space-Filling Inverted Index}, that orders the documents via an SFC before partitioning.
+
+%Finally, in \cite{zhang2013edbt}, the authors introduce \textit{I$^3$} a quad-tree-based, text-first structure.
+
+%Contrary to our approach, all the above approaches, focus on indexing spatio-textual data. To our knowledge, there exists no particular work that attempts to index time-series accompanied with spatial information. Our approach, which caries-out exactly that, also supports two additional queries, extending the collection of possible queries over hybrid data.
+

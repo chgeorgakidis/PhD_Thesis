@@ -1,0 +1,4 @@
+\subsection{Conclusions}
+\label{sec:conclusions}
+
+We have studied three variants of hybrid queries on geolocated time series, involving both range and top-$k$ search, and combining spatial distance with local time series similarity. The latter allows to measure similarity of time series over subsequences instead of their entire length, and thus enables the identification of more fine-grained trends and patterns. The queries are evaluated by hybrid index structures, in order to allow for simultaneous pruning by both criteria. We first discuss query evaluation using the previously proposed \btsr, and then we further extend it to derive the \sbtsr which exhibits even better performance, by using temporal segmentation of time series to derive tighter bounds. Our evaluation against several real-world datasets has shown that \sbtsr can compute results much faster for all query variants.

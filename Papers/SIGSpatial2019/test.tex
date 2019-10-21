@@ -1,0 +1,98 @@
+
+
+
+
+% \begin{minipage}{.25\textwidth}
+
+% \begin{figure*}[htbp]
+% \centering
+% \subfloat{\fbox{\includegraphics[width=0.35\textwidth]{Figures/legend.png}}}
+% \\
+% \vspace{-5pt}
+% \subfloat[Crime ($Q_{rr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Crime/varying_delta.eps}\label{subfig:var_delta_crime}}
+% \subfloat[Crime ($Q_{kr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Crime/varying_k_query2.eps}\label{subfig:var_k_crime}}
+% \subfloat[Crime ($Q_{rk}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Crime/varying_k_query3.eps}\label{subfig:var_ks_crime}}
+% \subfloat[$Q_{rr}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_1.eps}\label{subfig:scalability1}} \\
+% \vspace{-5pt}
+% \subfloat[Flickr ($Q_{rr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Flickr/varying_delta.eps}\label{subfig:var_delta_flickr}}
+% \subfloat[Flickr ($Q_{kr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Flickr/varying_k_query2.eps}\label{subfig:var_k_flickr}}
+% \subfloat[Flickr ($Q_{rk}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Flickr/varying_k_query3.eps}\label{subfig:var_ks_flickr}}
+% \subfloat[$Q_{kr}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_2.eps}\label{subfig:scalability2}} \\
+% \vspace{-5pt}
+% \subfloat[Taxi ($Q_{rr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Taxi/varying_delta.eps}\label{subfig:var_delta_taxi}}
+% \subfloat[Taxi ($Q_{kr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Taxi/varying_k_query2.eps}\label{subfig:var_k_taxi}}
+% \subfloat[Taxi ($Q_{rk}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Taxi/varying_k_query3.eps}\label{subfig:var_ks_taxi}}
+% \subfloat[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_3.eps}\label{subfig:scalability3}}
+% \vspace{-5pt}
+% \caption{Per column: $Q_{rr}(T_q, \rho, \epsilon, \delta)$ for varying $\delta$ -- $Q_{kr}(T_q, k, \epsilon, \delta)$ -- $Q_{rk}(T_q, k, \rho)$ for varying $k$ -- scalability. }
+% \label{fig:exp}
+% \end{figure*}
+
+% \end{minipage}
+
+
+% \begin{figure*}[htbp]
+% \centering
+% \subfloat{\fbox{\includegraphics[width=0.35\textwidth]{Figures/legend.png}}}\end{figure*}
+
+
+% \begin{figure*}
+% \centering
+% \begin{minipage}[h]{0.24\linewidth}
+% \subfigure[Crime ($Q_{rr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Crime/varying_delta.eps}\label{subfig:var_delta_crime}} \\
+% \subfigure[Flickr ($Q_{rr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Flickr/varying_delta.eps}\label{subfig:var_delta_flickr}} \\
+% \subfigure[Taxi ($Q_{rr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Taxi/varying_delta.eps}\label{subfig:var_delta_taxi}}
+% % \caption{$Q_{rr}(T_q, \rho, \epsilon, \delta)$ for varying $\delta$}\label{exp:triggerings}
+% \end{minipage}
+
+% \begin{minipage}[h]{0.24\linewidth}
+% \subfigure[Crime ($Q_{kr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Crime/varying_k_query2.eps}\label{subfig:var_k_crime}} \\
+% \subfigure[Flickr ($Q_{kr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Flickr/varying_k_query2.eps}\label{subfig:var_k_flickr}} \\
+% \subfigure[Taxi ($Q_{kr}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Taxi/varying_k_query2.eps}\label{subfig:var_k_taxi}}
+% % \caption{$Q_{kr}(T_q, k, \epsilon, \delta)$}\label{exp:stage_cost}
+% \end{minipage}
+
+% \begin{minipage}[h]{0.24\linewidth}
+% \subfigure[Crime ($Q_{rk}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Crime/varying_k_query3.eps}\label{subfig:var_ks_crime}} \\
+% \subfigure[Flickr ($Q_{rk}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Flickr/varying_k_query3.eps}\label{subfig:var_ks_flickr}} \\
+% \subfigure[Taxi ($Q_{rk}$)]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Taxi/varying_k_query3.eps}\label{subfig:var_ks_taxi}}
+% % \caption{$Q_{rk}(T_q, k, \rho)$ for varying $k$}\label{exp:histogram}
+% \end{minipage}
+
+% \begin{minipage}[h]{0.24\linewidth}
+% \subfigure[$Q_{rr}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_1.eps}\label{subfig:scalability1}} \\
+% \subfigure[$Q_{kr}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_2.eps}\label{subfig:scalability2}} \\
+% \subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.225\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_3.eps}\label{subfig:scalability3}}
+% % \caption{Scalability}\label{exp:histogram}
+% \end{minipage}
+
+% \end{figure*}
+
+
+
+\begin{figure*}
+\centering
+
+\begin{minipage}[h]{0.32\linewidth}
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Crime/varying_delta.eps}\label{subfig:scalability3}}}\label{exp:triggerings} 
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Flickr/varying_delta.eps}\label{subfig:scalability3}}}\label{exp:triggerings} 
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Taxi/varying_delta.eps}\label{subfig:scalability3}}}\label{exp:triggerings}
+\caption{Processing cost per stage}\label{exp:stage_cost}
+\end{minipage}
+
+
+\begin{minipage}[h]{0.32\linewidth}
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_3.eps}\label{subfig:scalability3}}}\label{exp:triggerings} 
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_3.eps}\label{subfig:scalability3}}}\label{exp:triggerings} 
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Taxi/varying_delta.eps}\label{subfig:scalability3}}}\label{exp:triggerings}
+\caption{Processing cost per stage}\label{exp:stage_cost}
+\end{minipage}
+
+\begin{minipage}[h]{0.32\linewidth}
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_3.eps}\label{subfig:scalability3}}}\label{exp:triggerings} 
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Scalability/varyingDatasetSize_3.eps}\label{subfig:scalability3}}}\label{exp:triggerings} 
+{\subfigure[$Q_{rk}$]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.9\textwidth]{Figures/Plots/Taxi/varying_delta.eps}\label{subfig:scalability3}}}\label{exp:triggerings}
+\caption{Active trajectories per cycle}\label{exp:histogram}
+\end{minipage}
+
+\end{figure*}

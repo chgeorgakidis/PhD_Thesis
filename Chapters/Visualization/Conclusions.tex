@@ -1,0 +1,10 @@
+% !TEX root = ThesisGchatzi.tex
+
+\graphicspath{{Papers/ElsevierBigDataResearch/}}
+
+\section{Summary}
+\label{sec:concl_vis}
+
+In this chapter, we introduced methods for map-based visual exploration over large geolocated time series data. To that end, we proposed two summarization approaches over geolocated time series, which allow a visual analytics application to retrieve the required information. The results can be displayed on a map, depicting the spatial distribution of the data in the form of MBRs for both approaches. Each approach also provides a time series summary, via time series bundles or tile maps respectively. To speed up the retrieval of the results, we employ two hybrid indexing techniques that allow pruning in both the spatial and the time series domains. Our experiments on a large-scale synthetic dataset indicated that the visualizations can be rendered fast, enabling efficient exploration in map-based applications; in the worst case, response time is up to a couple of seconds. Additionally, we examined indicative demonstrations of the visualizations generated from two real-world datasets in different application domains, confirming their helpfulness in jointly exploring both the time series themselves as well as their geographic distribution.
+
+In the next chapter, we deal tackle the problem of discovering pairs or bundles (groups) of co-evolving time series, i.e., time series that contain observation values at the same timestamps all along their duration. Additionally, we focus on local similarity search on geolocated time series, using a modified version of our \btsr index.

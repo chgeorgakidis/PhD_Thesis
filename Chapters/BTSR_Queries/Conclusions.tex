@@ -1,0 +1,12 @@
+% !TEX root = ThesisGchatzi.tex
+
+\graphicspath{{Papers/SIGSpatial2017/}{Papers/SIGSpatial2018/}}
+
+\section{Summary}
+\label{sec:concl_btsr_queries}
+
+In this chapter, we addressed the problem of hybrid similarity search and join over geolocated time series according to both their spatial proximity and time series similarity. Our approach takes advantage of different state-of-the-art indexing schemes to design an efficient algorithm for query evaluation. As far as similarity join is concerned, given that scalability is a bottleneck in such centralized settings, we show how a space-driven partitioning can be employed to deal with much larger datasets in cluster environments. Our parallel and distributed method can efficiently execute similarity joins per partition locally, while also minimizing the amount of data shuffled between processing nodes.
+
+Our experiments against diverse real-world and synthetic datasets from different domains and varying sizes confirm the efficiency and effectiveness of our algorithms and show that the proposed indices significantly improve performance when evaluating hybrid similarity joins, as well as queries combining boolean and/or top-$k$ filtering on both spatial proximity and time series similarity.
+
+In the following chapter we introduce two visual exploration methods for geolocated time series datasets, that leverage the \btsr index to speed-up the search and allow interactive exploratory visualizations.

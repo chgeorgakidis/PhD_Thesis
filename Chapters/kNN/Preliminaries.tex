@@ -1,0 +1,55 @@
+% !TEX root = ThesisGchatzi.tex
+
+\section{Preliminaries}
+\label{sec:knn_prelim}
+
+\graphicspath{{Papers/SpringerJournalOfBigData/}}
+
+In the following, we present basic concepts regarding classification and regression based on $k$NN joins, as well as methods for dimensionality reduction, essential for the implementation of FML-$k$NN. We also briefly describe Apache Flink, the distributed processing engine that we used.
+
+\subsection{Classification}
+\label{subsec:classification}
+A $k$NN joins classifier algorithm categorizes new elements in a \textit{testing} dataset ($R$). It detects the nearest neighbors of each elements in a \textit{training} dataset ($S$) via a similarity measure, expressed by a distance function (i.e., Euclidean, Manhattan, Minkowski). In FML-$k$NN we used the Euclidean distance, through which, for each query element in the testing dataset $R$ we obtain the dominant class (i.e., class membership) among its $k$NNs' classes. $k$NN classification in most cases is performed by a voting scheme, according to which, the class that appears more times among the nearest neighbors will be the resulting class. The voting scheme can be \textit{weighted} when someone takes into account the distances between the nearest neighbors. Then each nearest neighbor has a weight according to its distance to the query element.
+
+Let us consider the set of the $k$-nearest neighbors as $X = \{x_{1}^{NN}, x_{2}^{NN}, ...., x_{k}^{NN}\}$ and the class of each one as a set $C = \{c_{1}^{NN}, c_{2}^{NN}, ..., c_{k}^{NN}\}$. The weight of each nearest neighbor, indicating its impact on the final result, is calculated as follows:
+
+\begin{equation}
+	w_{i} = \left\{
+		\begin{array}{lr}
+			\frac{d_{k}^{NN} - d_{i}^{NN}}{d_{k}^{NN} - d_{1}^{NN}} & : d_{k}^{NN} \neq d_{1}^{NN}\\
+			1 & : d_{k}^{NN} = d_{1}^{NN}
+		\end{array}
+	\right., \quad i=1, ..., k
+\end{equation}
+where $d_{1}^{NN}$ is the closest neighbor and $d_{k}^{NN}$ the furthest one. By this calculation, the closest neighbors will be assigned a greater weight. We extend the approach to perform probabilistic classification (more details in Section~\ref{sec:knn_methods}).
+
+\subsection{Regression}
+\label{subsec:regression}
+Regression is a statistical process, used to estimate the relationship between one dependent variable and one or more independent variables. In the machine learning domain, regression is a supervised method, which outputs continuous values (instead of discrete values such as classes, categories, labels, etc.). These values represent an estimation of the target (dependent) variable for the new observations. A common use of the regression analysis is the prediction of a variable's values (e.g., future water/energy consumption, product prices, web pages visibility/prediction of potential visitors), based on existing/historical data. There are numerous statistical processes that perform regression analysis, however, in the case of $k$NN, regression can be performed by averaging the numerical target variables of the $k$NN as follows.
+
+Considering the same set of $k$NNs ($X = \{x_{1}^{NN}, x_{2}^{NN}, ...., x_{k}^{NN}\}$) and the target variable of each one as $V = \{v_{1}^{NN}, v_{2}^{NN}, ..., v_{k}^{NN}\}$, the value of the new observation will be calculated as:
+
+\begin{equation}
+	v_{r} = \frac{\sum_{i=1}^{k} v_{i}^{NN}}{k}, i=1, ..., k
+\end{equation}
+
+FML-$k$NN regressor implements the above procedure. At this point we should note that $k$-nearest neighbors performs non-linear classification and regression, as it does not seek a decision hyperplane to separate the data or a straight line to fit them. Instead, it seeks the closest elements in the neighborhood of the query element based on the Euclidean distance, which results to a non-linear traversal of the space.
+
+\subsection{Dimensionality reduction}
+\label{subsec:dim_red}
+In order to avoid expensive distance computations caused by high dimensional input data, we reduce their dimensionality to one. This is accomplished by three different SFC implementations, namely the $z$-order, the Gray-code and the Hilbert curve, all supported by FML-$k$NN in order to provide the flexibility of tuning according to specific needs, w.r.t. time performance or accuracy. Each curve scans the $n$-dimensional space in a dissimilar manner and exhibits different characteristics in terms of scanning ``fairness'' and computation complexity~\cite{mokbel2002pms}.
+
+\paragraph{$z$-order curve}
+The $z$-order curve (Figure~\ref{figure1}a) is computed by interleaving the binary codes of an element's features. This procedure takes place starting from the most significant bit (MSB) towards the least significant (LSB). For example, the $z$-value of a 3-dimensional element with feature values 3 ($011_2$), 4 ($100_2$) and 5 ($110_2$), can be formed by first interleaving the MSB of each number (0, 1 and 1) going towards the LSB, thus, forming a final value of $011101100_2$. This is a fast procedure, not requiring any costly CPU execution.
+
+\paragraph{Gray-code curve}
+The Gray-code curve (Figure~\ref{figure1}b) mapping computation is very similar to the $z$-order curve as it requires only an extra step. After obtaining the $z$-value as described above, it is transformed to Gray-code by performing exclusive-or operations to successive bits. For example, the Gray-code value of $0100_2$ would be calculated as follows. Initially, the MSB is left the same. Then, the second bit would be an exclusive-or of the first and second ($0_2\oplus1_2=1_2$), the third and exclusive-or of the second and third ($1_2\oplus0_2=1_2$) and the fourth an exclusive-or of the third and fourth ($0_2\oplus0_2=0_2$). Thus, the final Grey-code value would be $0110_2$.
+
+\paragraph{Hilbert curve}
+Finally, the Hilbert curve (Figure~\ref{figure1}c) requires more complex computations in order to be calculated. The intuition behind Hilbert curve is that two consecutive points in the sequence are nearest neighbors, thus, avoiding ``jumping'' to farther elements, as in the $z$-order and Gray-code curves. The curve is generated recursively by rotating the two bottom quadrants at each recursive step. There are several algorithms that map coordinates to Hilbert coding. In this work, we employ the methods described in~\cite{lawder00calculationof}, offering both forward and inverse Hilbert mapping.
+
+\subsection{Apache Flink}
+\label{subsec:flink_knn}
+Our framework was implemented using the Apache Flink distributed processing engine. Flink offers a variety of \textit{transformations} on datasets and is more flexible than similar engines (i.e., Apache Hadoop and Apache Spark), due to the fact that it executes its jobs in a pipelined manner, thus, gaining in performance. Also, it efficiently supports iterative algorithms, which are extremely expensive in the standard MapReduce framework. The parallel tasks are executed by task managers, each one usually denoting a single machine with a number of further parallel processing slots, usually set to be the same as the number of available CPUs. 
+
+Flink is more appropriate for demanding computations performance-wise, as it does not require key-value pairs during the transitions that take place between the transformations. Instead, Java plain objects or just primitive types are used, optionally grouped in \textit{tuples}. The grouping (partitioning) and sorting can be applied directly according to specific tuple elements or object variables, thus, avoiding the need of generating key-value pairs, which are required i.e., by Hadoop in order to properly partition and sort the elements during the shuffle and sort phase. Furthermore, Flink is equipped with built-in automatic job optimization, which achieves better performance compared to other engines.

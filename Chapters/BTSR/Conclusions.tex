@@ -1,0 +1,10 @@
+% !TEX root = ThesisGchatzi.tex
+
+\graphicspath{{Papers/SIGSpatial2017/}{Papers/SIGSpatial2018/}}
+
+\section{Summary}
+\label{sec:concl_btsr}
+
+In this chapter, we have addressed the problem of indexing geolocated time series data. Our hybrid \tsr index enhances the R-tree by augmenting the spatial bounds in its nodes with respective time series bounds. We have also presented an optimized variant, the \btsr, which maintains tighter time series bounds in each node by bundling similar time series together.
+
+In the following chapter, we will showcase the potential of our hybrid indexing methods for processing various types of hybrid queries on geolocated time series, that combine spatial proximity with time series similarity. These include several similarity search queries, as well as a similarity join query, implemented both for centralized and distributed environments.

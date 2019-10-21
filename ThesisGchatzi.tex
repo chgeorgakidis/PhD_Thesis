@@ -1,0 +1,145 @@
+% !TEX encoding = UTF-8 Unicode
+% !TEX TS-program = xelatex
+
+\documentclass[12pt,a4paper,twoside]{book}
+
+\usepackage{fontspec}
+\setromanfont{Times New Roman}
+\setmainfont[Mapping=tex-text]{Times New Roman}
+
+%\usepackage[LGR]{fontenc}
+\usepackage[english, greek]{babel}
+%\usepackage[utf8]{inputenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{ragged2e}
+
+\usepackage{amsmath,amsthm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{fixmath}
+\usepackage[colorlinks,linkcolor=blue,linktocpage]{hyperref}
+\usepackage[toctitles]{titlesec}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{wrapfig} 
+\usepackage{clrscode}
+\usepackage{listings}
+\usepackage[caption=false]{subfig}
+\usepackage{color,soul}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usepackage{scalefnt}
+\usepackage{multirow} 
+\usepackage{array}
+\usepackage{setspace}
+\usepackage[linesnumbered, vlined, ruled]{algorithm2e}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{chapterfolder}
+\usepackage{import}
+
+\titleclass{\subsubsubsection}{straight}[\subsection]
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection.\arabic{subsubsubsection}}
+\renewcommand\theparagraph{\thesubsubsubsection.\arabic{paragraph}}
+\titleformat{\subsubsubsection}
+  {\normalfont\normalsize\bfseries}{\thesubsubsubsection}{1em}{}
+\titlespacing*{\subsubsubsection}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{5}{\z@}
+  {3.25ex \@plus1ex \@minus.2ex}
+  {-1em}
+  {\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{6}{\parindent}
+  {3.25ex \@plus1ex \@minus .2ex}
+  {-1em}%
+  {\normalfont\normalsize\bfseries}}
+\def\toclevel@subsubsubsection{4}
+\def\toclevel@paragraph{5}
+\def\toclevel@paragraph{6}
+\def\l@subsubsubsection{\@dottedtocline{4}{7em}{4em}}
+\def\l@paragraph{\@dottedtocline{5}{10em}{5em}}
+\def\l@subparagraph{\@dottedtocline{6}{14em}{6em}}
+\makeatother
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+\bibliographystyle{alpha}
+\def\avg{\mathop{avg}}
+\newcommand{\snote}[1]{{\textcolor{blue}{#1}}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\eat}[1]{}
+\newcommand{\mnote}[2][FIXME]{\textcolor{red}{[\textbf{#1:}} {\color{blue} {#2}}\textcolor{red}{\textbf{]}}}
+\newcommand{\checknote}[2][CHECK]{\textcolor{red}{[\textbf{#1:}} {\color{blue} {#2}}\textcolor{red}{\textbf{]}}}
+\newcommand{\tuple}[1]{\ensuremath{\left \langle #1 \right \rangle }}
+\newcommand{\tsr}{\mbox{TSR-tree}\xspace}
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+\newcommand{\alg}[1]{\texttt{\textsc{#1}}}
+\newcommand{\rtree}{\mbox{R-tree}\xspace}
+\newcommand{\btsr}{\mbox{BTSR-tree}\xspace}
+\newcommand{\isax}{\mbox{\texorpdfstring{$i$}SSAX}\xspace}
+\newcommand{\hisax}{\mbox{geo-\texorpdfstring{$i$}SSAX}\xspace}
+\newcommand{\opt}{\mbox{\em SimJoinOPT}\xspace}
+\newcommand{\base}{\mbox{\em SimJoinMR}\xspace}
+\newcommand{\sbtsr}{\mbox{\texorpdfstring{$\mathcal{S}$}BBTSR-tree}\xspace}
+\renewcommand{\l}{\ell}
+\renewcommand{\baselinestretch}{.97}
+\renewcommand{\^}[1]{\ensuremath{\mathcal{#1}}}
+\renewcommand{\^}[1]{\ensuremath{\mathcal{#1}}}
+\setlength{\textheight}{23cm}
+\setlength{\textwidth}{15.5cm}
+\setlength{\oddsidemargin}{0.2cm}
+\setlength{\evensidemargin}{0.2cm}
+\setlength{\topmargin}{-0.5cm}
+\setlength{\headsep}{1cm}
+\newtheorem{myexample}{Example}
+\newtheorem{mylemma}{Lemma}
+\newtheorem{problem}{Problem}
+\newtheorem{mydefinition}{Definition}
+\newtheorem{myobservation}{Observation}
+\SetKwComment{com}{\hfill $\triangleright$ }{}
+\usetikzlibrary{arrows}
+\usetikzlibrary{positioning}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{decorations.pathreplacing}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+\setcounter{tocdepth}{2}
+\begin{document}
+
+\frontmatter
+
+\pagestyle{empty}
+\frenchspacing
+\setcounter{page}{-11}
+\import{.}{Cover}
+\import{.}{Incover}
+\thispagestyle{empty}
+\import{.}{Thanks}
+
+\selectlanguage{english}
+\import{.}{Abstract}
+\selectlanguage{english}
+
+\pagestyle{headings}
+\tableofcontents
+\listoffigures
+
+\mainmatter
+
+\import{.}{Introduction}
+\import{.}{Related}
+\import{Chapters/BTSR/}{Main}
+\import{Chapters/BTSR_Queries/}{Main}
+\import{Chapters/Visualization/}{Main}
+\import{Chapters/LocalSimilarity/}{Main}
+\import{Chapters/kNN/}{Main}
+\import{.}{Conclusions}
+
+\newpage\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{References}
+\end{document}
