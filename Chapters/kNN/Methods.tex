@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \section{Methods} 
 \label{sec:knn_methods}
@@ -14,9 +14,9 @@ This section outlines the design and implementation of FML-$k$NN. One of the mai
 
 We avoid the above issues by unifying the distributed sessions into a single one. Figure~\ref{figure2} illustrates the unified session. The stages are executed sequentially and I/O operations on HDFS take place only during the start and end of the execution.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
 	\centering
-	\includegraphics[width=0.9\textwidth]{figures/figure2.png}
+	\includegraphics[width=0.8\textwidth]{figures/figure2.png}
 	\caption{Single Flink session.}
 	\label{figure2}
 \end{figure}
@@ -26,9 +26,9 @@ The input dataset is consisted of points in a $d$-dimensional space. To perform 
 
 To diminish the negative effect of such false approximations, we generate a pre-determined number of alternate versions of the dataset, where each element is randomly shifted by a pre-calculated random vector. As an example, let us suppose that we have a dataset whose elements consists of three features and a random vector $v=\{3, 5, 2\}$. Then, all the elements of the dataset are shifted using this vector, e.g., an element $el=\{2, 6, 9\}$ will be altered to $el'=\{2+3, 5+6, 2+9\}=\{5, 11, 11\}$. This is demonstrated for $z$-order curve in Figure 3, where the four bottom-left elements are shifted twice in the $x$-axis and once in the $y$-axis, altering the sequence in which they are scanned by the curve. This way, neighboring points that are distant on the curve will possibly be closer in the shifted dataset. This procedure compensates the lost accuracy, as it enables scanning the space in an altered sequence. During execution, the shifted dataset is concatenated with the original one and the algorithm is executed, producing \textit{multiple} groups of $k$NNs, from which the final $k$NNs are determined. The limitation of this approach is the fact that the size of the input dataset is increased according to the number of shifts $i\in{[1, \alpha]}$, where $\alpha$ is the total number of shifts. Finally, we should mention that the above process is similar for all SFCs.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
 	\centering
-	\includegraphics[width=0.5\textwidth]{figures/figure3.pdf}
+	\includegraphics[width=0.45\textwidth]{figures/figure3.pdf}
 	\caption{Data shifting.}
 	\label{figure3}
 \end{figure}
@@ -60,24 +60,25 @@ FML-$k$NN has the same workflow as other similar approaches~\cite{song2015hal}, 
 	\end{itemize}
 \end{itemize}
 
-\begin{figure}[!ht]
+During data pre-processing, the sampling process is performed by a separate \texttt{flatMap} operation, which in return feeds the reducers with a smaller, sampled dataset used to calculate the partitioning ranges. The unified transformed datasets are directly passed to the mappers of stage 2, which also receive the partitioning ranges as a broadcast dataset via the \texttt{withBroadCastSet} operation. The data partitioning and organization stage directly feeds the input of the $k$NN computation. Flink's agility allows for the entire removal of the mapping procedure of stage 3, as it only propagates the results from the stage 2 to the reducers of stage 3. This increases the efficiency as it reduces the algorithm's resource requirements. In the following, we present each stage in more details.
+
+\begin{figure}[!tb]
 	\centering
-	\includegraphics[width=\textwidth]{figures/figure4.png}
+	\includegraphics[width=0.85\textwidth]{figures/figure4.png}
 	\caption{Single-session FML-$k$NN.}
 	\label{figure4}
 \end{figure}
-
-During data pre-processing, the sampling process is performed by a separate \texttt{flatMap} operation, which in return feeds the reducers with a smaller, sampled dataset used to calculate the partitioning ranges. The unified transformed datasets are directly passed to the mappers of stage 2, which also receive the partitioning ranges as a broadcast dataset via the \texttt{withBroadCastSet} operation. The data partitioning and organization stage directly feeds the input of the $k$NN computation. Flink's agility allows for the entire removal of the mapping procedure of stage 3, as it only propagates the results from the stage 2 to the reducers of stage 3. This increases the efficiency as it reduces the algorithm's resource requirements. In the following, we present each stage in more details.
 
 \subsubsection{Data pre-processing (stage 1)}
 \label{par:algorithmic1}
 The $R$ and $S$ datasets are read as plain text from HDFS and delivered to two separate concurrent \texttt{flatMap} transformations, identifiable by the input source file. During this stage, the SFC values ($z$-values for $z$-order, $g$-values for Grey-code curve and $h$-values for Hilbert) and possible shifts, are calculated and passed to a \texttt{union} transformation, which creates a union of the two datasets. The unified and transformed datasets are then forwarded to the next stage (stage 2) and to a sampling process, which is performed by a separate \texttt{flatMap} transformation. The sampled dataset is then passed on a \texttt{groupReduce} transformation, grouped by a shift number. This way, $\alpha$ (number of shifts) reducers will be assigned with the task of calculating the partitioning ranges for $R$ and $S$ datasets, which are then broadcast to the next stage (data partitioning and organization). 
 
-Broadcasting the partitioning ranges significantly reduces the computational resources required by the reducers compared to F-z$k$NN, as it avoids the race condition between stages 1 and 2 (Figure~\ref{figure5}a). During the race condition, the transformed dataset is forwarded to the second stage before the partitioning ranges are calculated by the reducers, causing its mapping operation to be initiated, which would result in an error, as the partitioning ranges are required. To avoid this race condition, F-z$k$NN's reducers have to locally cache the transformed dataset while it is being sampled for the calculation of ranges, as depicted in Figure~\ref{figure5}b. FML-$k$NN overcomes this issue, by broadcasting the partitioning ranges, as this procedure blocks the execution of the second stage until the transformed dataset is ready. The left part of Figure~\ref{figure4} depicts the whole process.
+Broadcasting the partitioning ranges significantly reduces the computational resources required by the reducers compared to F-z$k$NN, as it avoids the race condition between stages 1 and 2 (Figure~\ref{figure5a}). During the race condition, the transformed dataset is forwarded to the second stage before the partitioning ranges are calculated by the reducers, causing its mapping operation to be initiated, which would result in an error, as the partitioning ranges are required. To avoid this race condition, F-z$k$NN's reducers have to locally cache the transformed dataset while it is being sampled for the calculation of ranges, as depicted in Figure~\ref{figure5b}. FML-$k$NN overcomes this issue, by broadcasting the partitioning ranges, as this procedure blocks the execution of the second stage until the transformed dataset is ready. The left part of Figure~\ref{figure4} depicts the whole process.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
 	\centering
-	\includegraphics[width=\textwidth]{figures/figure5.pdf}
+	\subfloat[Race condition.]{\includegraphics[width=0.5\textwidth]{figures/figure5a.pdf}\label{figure5a}}
+	\subfloat[Solution.]{\includegraphics[width=0.5\textwidth]{figures/figure5b.pdf}\label{figure5b}}
 	\caption{F-z$k$NN race condition and solution.}
 	\label{figure5}
 \end{figure}
@@ -85,8 +86,8 @@ Broadcasting the partitioning ranges significantly reduces the computational res
 Algorithm~\ref{alg:single_session_algorithm_stage1} presents the pseudocode of stage 1. The random vectors are initially generated and cached on HDFS in order to be accessible by all the nodes which take part in the execution. They are then given as input to the algorithm, along with datasets $R$ and $S$. Notice that $\textbf{v}_1=\overrightarrow{0}$ indicating that the datasets are not shifted during this iteration. This process takes place $\alpha$ times, where $\alpha$  is the number of shifts (Line 5). After shifting the datasets, during the first mapping phase (Lines 5-9), the elements' SFC values are calculated and collected to $\hat{R}^T_i$ and $\hat{S}^T_i$, where $i=1,...,\alpha$. Then, the sampling is performed by the second mapping phase (Lines 10-17). During the reduce phase (Lines 18-22), the partition ranges ($Rrange_i$ and $Srange_i$) for each shift are calculated using the sampled datasets and broadcast to stage 2 (Lines 18-20). The output consists of the unified transformed datasets, which finally feed the data partitioning and organization stage (Line 22).
 
 \begin{algorithm}[!ht]
-\begin{small}
 	\DontPrintSemicolon
+	\begin{footnotesize}
 	\Comment The pre-processing stage's input \;
 	\KwIn{Datasets $R$, $S$, random vectors $\textbf{V}=\{\textbf{v}_1, ..., \textbf{v}_\alpha\}, \textbf{v}_i=\overrightarrow{0}$ and sampling threshold $\sigma$}
 	\Comment The output, that will be emitted to the next stage \;
@@ -115,9 +116,9 @@ Algorithm~\ref{alg:single_session_algorithm_stage1} presents the pseudocode of s
 			\Return $R^T_i \cup S^T_i$
 		}
 	}
+	\end{footnotesize}
 	\caption{FML-$k$NN (stage 1).}
 	\label{alg:single_session_algorithm_stage1}	
-\end{small}
 \end{algorithm}
 
 \subsubsection{Data partitioning and organization (stage 2)}
@@ -127,8 +128,8 @@ The transformed datasets of stage 1 are partitioned to $n \times \alpha$ blocks 
 Algorithm~\ref{alg:single_session_algorithm_stage2} presents the pseudocode of stage 2. During the map phase (Lines 7-18), after having read each shift's broadcast partition ranges (Line 6), the received transformed datasets are partitioned into $n \times \alpha$ buckets ($R^{g \times i}$ and $S^{g \times i}$, $i=1,...,\alpha$, $g=1,...,n$, Lines 13 \& 18), $\alpha$ being the number of shifts and $n$ the number of partitions. The partitions $S^{g \times i}$ are then sorted and emitted to the reducers (Lines 23-30) along with the corresponding partitions $R^{g \times i}$. There, for each $x \in R$ element, a range search is performed on the proper sorted partition in order for its $k$NN to be determined (Line 23) and its initial coordinates are calculated (Line 24). The initial coordinates of all neighboring elements' coordinates are then calculated (Line 26) and their distance to the $x \in R$ element is computed (Line 27). Finally, all nearest neighbors are integrated into the proper dataset ($R_{k \times \alpha}$, Line 28) along with the calculated distance and feed the stage 3, grouped by $x \in R$ elements.
 
 \begin{algorithm}[!ht]
-\begin{small}
 	\DontPrintSemicolon
+	\begin{footnotesize}
 	\Comment This stage's input are the datasets emitted during the partitioning and organization stage \;
 	\KwIn{Datasets $R^T_i$, $S^T_i$, $i=1,...,\alpha$}
 	\Comment The output, that will be emitted to the next stage \;
@@ -173,9 +174,9 @@ Algorithm~\ref{alg:single_session_algorithm_stage2} presents the pseudocode of s
 		\Comment Emit to the final stage, grouped by element \;
 		\Return $R_{k \times \alpha}$	
 	}
+	\end{footnotesize}
 	\caption{FML-$k$NN (stage 2).}
 	\label{alg:single_session_algorithm_stage2}
-\end{small}
 \end{algorithm}
 
 \subsubsection{\texorpdfstring{$k$}NNN computation (stage 3)}
@@ -211,8 +212,8 @@ In both cases, the results for each query element are stored on HDFS in plain te
 Algorithm~\ref{alg:single_session_algorithm_stage3} presents the pseudocode of stage 3. During this stage, which consists of only a reduce operation, $k$NNs of each $R$ element are fetched from the grouped set of $R_{k \times \alpha}$. Finally, for each query element either classification (Line 9) or regression (Line 11) is performed, after determining its final nearest neighbors (Line 7). The results are added to the resulting dataset (Line 9), which is then stored on HDFS (Line 12) in the proper format.
 
 \begin{algorithm}[!ht]
-\begin{small}
 	\DontPrintSemicolon
+	\begin{footnotesize}
 	\Comment The input is the grouped by element dataset emitted during the previous stage \;
 	\KwIn{Datasets $R, R_{k \times \alpha}$}
 	\Comment The algorithm's results \;
@@ -234,9 +235,9 @@ Algorithm~\ref{alg:single_session_algorithm_stage3} presents the pseudocode of s
 		\Comment Store the final results on HDFS \;
 		\Return $R_f$
 	}
+	\end{footnotesize}
 	\caption{FML-$k$NN (stage 3).}
 	\label{alg:single_session_algorithm_stage3}
-\end{small}
 \end{algorithm}
 
 \subsubsection{Spark implementation}

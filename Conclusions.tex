@@ -1,9 +1,9 @@
-% !TEX root = thesis_poulis.tex
+% !TEX root = ThesisGchatzi.tex
 
 \chapter{Conclusions and Future work}
 \label{chap:conclusions}
 
-In this Thesis, we focused on scalable hybrid indexing, querying and exploration on big time series data, geolocated or not. We also developed a framework for efficient data analysis and knowledge extraction from Big Data. Section~\ref{sec:conc} concludes this work, while in Section~\ref{sec:future} we present our main future directions.
+In this thesis, we focused on scalable hybrid indexing, querying and exploration on big time series data, geolocated or not. We also developed a framework for efficient data analysis and knowledge extraction from Big Data. Section~\ref{sec:conc} concludes this work, while in Section~\ref{sec:future} we present our main future directions.
 
 \section{Conclusions}
 \label{sec:conc}
@@ -42,12 +42,12 @@ Finally, regarding scalable $k$NN joins:
 
 \section{Future Work}
 \label{sec:future}
-In the following, we provide several possible future directions for our work, presented in this Thesis.
+In the following, we provide several possible future directions for our work, presented in this thesis.
 
 \begin{itemize}
 	\item We plan to expand the indexing capabilities of \btsr on multi-dimensional feature spaces over distributed processing frameworks and also explore adaptivity to query workloads.
 	\item Regarding visual exploration of geolocated time series, we will research and support more detailed visual analytics and identify more fine-grained patterns. An interesting direction would be to support drilling-down in a particular summarized result and discover whether there are differentiations in the distributions of its constituent, more detailed patterns, both in spatial and time series domains. Moreover, we will focus on supporting more complex time series distance measures that may boost the quality of our summaries.
 	\item For pair and bundle discovery, we plan to further improve the scalability of our algorithms to extend their applicability over very large time series datasets, both in terms of cardinality, as well as in terms of length.
-	\item Regarding local similarity search, we plan to study the applicability of \sbtsr on various other hybrid query types, enlarging its potential in geolocated time series exploration.
+	\item Regarding local similarity search, we plan to study the applicability of \texorpdfstring{$\mathcal{S}$}BBTSR-tree on various other hybrid query types, enlarging its potential in geolocated time series exploration.
 	\item Finally, we will perform extended case studies using FML-$k$NN on more datasets from various sources, in order to establish our framework's ability in performing ad-hoc data mining tasks. Furthermore, we will explore its applicability on data stream mining applications, where the input is a continuous flow of data records. We will also enhance our framework's knowledge discovery capacity, by extending it with more distributed machine learning approaches, in an attempt to raise its potential on the continuously growing field of Big Data analytics.
 \end{itemize}

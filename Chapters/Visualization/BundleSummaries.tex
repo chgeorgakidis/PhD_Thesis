@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \section{Computing Bundle Summaries}
 \label{sec:bundles_summary}
@@ -46,6 +46,7 @@ Line 3 of Algorithm~\ref{alg:algorithm1} calls the corresponding procedure. For 
 
 \begin{algorithm}[!ht]
   \DontPrintSemicolon
+  \begin{footnotesize}
   \KwIn{Input rectangle $q$; number $k$ of bundles to be generated; number $l$ of MBRs per bundle}
   \KwOut{A list $R_{b}$ containing tuples of bundles, MBRs, and object counts}
   $R \leftarrow IndexTraversal(q)$   \tcp*{Step 1}
@@ -98,6 +99,7 @@ Line 3 of Algorithm~\ref{alg:algorithm1} calls the corresponding procedure. For 
     }
     \KwRet $R_{b}$
   }
+  \end{footnotesize}
   \caption{Bundles Summarization of Geolocated Time Series}
   \label{alg:algorithm1}
 \end{algorithm}

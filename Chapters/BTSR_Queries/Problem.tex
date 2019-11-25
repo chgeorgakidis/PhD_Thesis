@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \graphicspath{{Papers/SIGSpatial2017/}{Papers/SIGSpatial2018/}}
 
@@ -9,7 +9,7 @@ Next, we outline different hybrid similarity search and join query variants, com
 
 \subsection{Similarity Search}
 \label{subsec:sim_serach_prob}
-We are interested in hybrid similarity search queries on geolocated time series, i.e., queries that retrieve search results based on both spatial distance and time series distance. In these queries, a geolocated time series $T_q$ is given as a reference, and the goal is to identify similar time series to $T_q$, based on both spatial distance and time series distance. Different query variants can be derived. First, the query condition can be applied on each distance independently or on the hybrid distance defined in Section~\ref{subsec:index_pruning}. Second, the condition can be a boolean filter (i.e., retrieve all geolocated time series with distance lower than $\theta$) or a top-$k$ filter (i.e., retrieve the $k$ geolocated time series having the smallest distance). These lead to the query variants listed in Table \ref{tab:query_types} and outlined below:
+We are interested in hybrid similarity search queries on geolocated time series, i.e., queries that retrieve search results based on both spatial distance and time series distance. In these queries, a geolocated time series $T_q$ is given as a reference, and the goal is to identify similar time series to $T_q$, based on both spatial distance and time series distance. Different query variants can be derived. First, the query condition can be applied on each distance independently or on the hybrid distance defined in Section~\ref{subsec:index_pruning}. Second, the condition can be a boolean filter (i.e., retrieve all geolocated time series with distance lower than $\theta$) or a top-$k$ filter (i.e., retrieve the $k$ geolocated time series having the smallest distance). These lead to the hybrid query variants listed in Table \ref{tab:query_types} and outlined below:
 
 \begin{itemize}
  \item $Q_{bb}(T_q, \theta_{sp}, \theta_{ts})$. This query applies two individual boolean filters. It retrieves each time series $T$ having $dist_{sp}(T_q, T) \leq \theta_{sp}$ and $dist_{ts}(T_q, T) \leq \theta_{ts}$. In other words, it retrieves all time series that are located within a radius $\theta_{sp} \cdot maxDist_{sp}$ from $T_q$'s location and their time series dissimilarity to $T_q$ is at most $\theta_{ts} \cdot maxDist_{ts}$.
@@ -23,6 +23,7 @@ We are interested in hybrid similarity search queries on geolocated time series,
  \centering
  \caption{Similarity search query variants.}
  \vspace{-10pt}
+ \begin{small}
  \begin{tabular}{c c c}
   \toprule
   Query Variant & Spatial Filter & Time Series Filter \\
@@ -34,10 +35,11 @@ We are interested in hybrid similarity search queries on geolocated time series,
   $Q_{hk}$ & \multicolumn{2}{c}{top-$k$} \\
   \bottomrule
  \end{tabular}
+ \end{small}
  \label{tab:query_types}
 \end{table}
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \subfloat[$Q_{bb}(T_q, \theta_{sp}, \theta_{ts})$]{\includegraphics[width=0.45\textwidth]{figures/query_bb.png}\label{subfig:example_queries_bb}}
  \qquad
@@ -47,7 +49,7 @@ We are interested in hybrid similarity search queries on geolocated time series,
 \end{figure}
 
 \begin{myexample}
- Figure \ref{fig:example_queries} illustrates an example including two hybrid queries, $Q_{bb}(T_q, \theta_{sp}, \theta_{ts})$ and $Q_{kb}(T_q, k, \theta_{ts})$, on a set of geolocated time series $T_1$, \ldots, $T_9$. In both cases, the reference time series $T_q$ specified by the query is shown in red. Moreover, those time series having dissimilarity to $T_q$ at most $\theta_{ts}$ (i.e., $T_2$, $T_4$, $T_6$, $T_9$) are also shown with red lines. In the first query, only time series within a radius equal to the spatial distance threshold $\theta_{sp}$ are retrieved. Thus, the result contains only time series $T_2$ and $T_4$, whereas $T_6$ and $T_9$ are excluded. The second query for $k=3$ retrieves the three closest time series to $T_q$ having dissimilarity at most $\theta_{ts}$, i.e., $T_2$, $T_4$ and $T_6$. \qed
+ Figure \ref{fig:example_queries} illustrates an example including two queries, $Q_{bb}(T_q, \theta_{sp}, \theta_{ts})$ and $Q_{kb}(T_q, k, \theta_{ts})$, on a set of geolocated time series $T_1$, \ldots, $T_9$. In both cases, the reference time series $T_q$ specified by the query is shown in red. Moreover, those time series having dissimilarity to $T_q$ at most $\theta_{ts}$ (i.e., $T_2$, $T_4$, $T_6$, $T_9$) are also shown with red lines. In the first query, only time series within a radius equal to the spatial distance threshold $\theta_{sp}$ are retrieved. Thus, the result contains only time series $T_2$ and $T_4$, whereas $T_6$ and $T_9$ are excluded. The second query for $k=3$ retrieves the three closest time series to $T_q$ having dissimilarity at most $\theta_{ts}$, i.e., $T_2$, $T_4$ and $T_6$. \qed
 \end{myexample}
 
 \subsection{Similarity Join}
@@ -66,7 +68,7 @@ Figure~\ref{fig:simjoin_example} depicts two sets of geolocated time series, $\{
 \qed
 \end{myexample}
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \includegraphics[width=0.45\textwidth]{figures/sim_join.png}
  \caption{Hybrid similarity join over geolocated time series.}

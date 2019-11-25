@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \subsection{Experimental Evaluation}
 \label{sec:evaluation}
@@ -36,7 +36,7 @@ Table~\ref{tab:parameters1} lists the range of values for the parameters used in
 \begin{table}[ht]
 \centering
 \caption{Parameters tested in the experiments.}
-\begin{footnotesize}
+\begin{small}
 \begin{tabular}{lc} 
 \hline
 {\em Parameter} &{\em Values} \\
@@ -45,7 +45,7 @@ Dataset size & 1000K, 2000K, 3000K, {\bf 4000K} \\
 Map scale & 1:50000, 1:25000, 1:20000, 1:15000, 1:10000, {\bf 1:5000}, 1:500 \\
 \hline
 \end{tabular}
-\end{footnotesize}
+\end{small}
 \label{tab:parameters1}
 \end{table}
 
@@ -87,7 +87,7 @@ Figure~\ref{fig:nyc_example} illustrates another example, this time using the ta
 \paragraph{Results.} We evaluate the performance of our approach on larger datasets in terms of response time for different zoom levels on the map using map scales, since zooming-in requires deeper traversal of the \btsr index. The comparison is performed for subsets of the synthetic dataset of different size. We measure the {\em accuracy} both in spatial and time series domains, by calculating the mean Euclidean distance of each object located within the spatial area of interest from its closest bundle and MBR, respectively. Since this is intended as an interactive application, where the summarization method is triggered as soon as the user moves the map, {\em response times} must be adequately small. In our method, this is facilitated by the fact that the search along a path stops once it encounters a node whose MBR is contained in the actual map extent (rectangle). However, for the same reason, the responsiveness is expected to come at the expense of the summaries' level of detail, since the inner nodes contain coarser information regarding the time series they contain in their sub-trees.
 
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \includegraphics[width=0.75\textwidth]{figures/BTSR_zoom.pdf}
  \caption{Execution time for different map scales.}
@@ -98,11 +98,11 @@ Figure~\ref{fig:nyc_example} illustrates another example, this time using the ta
 Figure~\ref{fig:btsr_zoom} depicts traversal costs for different map scales over the areas covered by the three datasets. More specifically, the water and synthetic datasets cover the area of the city of Alicante, Spain, whereas the taxi dataset the wider metropolitan area of New York City. Response time in all cases is equal or lower than one second. The synthetic dataset, due to its very high density is significantly slower than the rest, however still the results are obtained in less than a second. The response for the water dataset is almost instant due to its small size and very low density. Initially, in all cases, at the largest scale, the visible area of the map contains all the time series in the dataset, thus it only has to retrieve information from the root of the index. Then, as we zoom in, more nodes have to be visited, as the MBRs of the accessed nodes begin to overlap with the map rectangle and their children have to be retrieved. The worst case for the synthetic dataset is at scale 1:5000, which roughly corresponds to a large neighborhood of the city, where many time series are located. For the taxi dataset, the worst case is at 1:20000, which corresponds to the wider Manhattan area and then the response time gradually drops due to the lower dataset density. The number of nodes accessed in each case is proportional to the response times, ranging from one node (the root) in case of the smaller map scale (all city) up to 165 at scale of 1:5000 for the synthetic dataset, one up to 53 for the taxi dataset and one up to 15 for the water dataset. Interestingly, fewer node accesses are required in all cases at the very large scale of 1:500, since the respective small map area overlaps with fewer nodes and most of the search space is pruned. 
 
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
- \subfloat[Accuracy in spatial domain.]{\includegraphics[width=0.30\textwidth]{figures/BTSR_error_sp.pdf}\label{subfig:btsr_error_sp}}
- \subfloat[Accuracy in time domain.]{\includegraphics[width=0.30\textwidth]{figures/BTSR_error_ts.pdf}\label{subfig:btsr_error_ts}}
- \subfloat[Response time.]{\includegraphics[width=0.30\textwidth]{figures/BTSR_time.pdf}\label{subfig:btsr_time}}\
+ \subfloat[Accuracy in spatial domain.]{\includegraphics[width=0.4\textwidth]{figures/BTSR_error_sp.pdf}\label{subfig:btsr_error_sp}}
+ \subfloat[Accuracy in time domain.]{\includegraphics[width=0.4\textwidth]{figures/BTSR_error_ts.pdf}\label{subfig:btsr_error_ts}} \\
+ \subfloat[Response time.]{\includegraphics[width=0.4\textwidth]{figures/BTSR_time.pdf}\label{subfig:btsr_time}}\
 \caption{Assessment of bundle summarization.}
 \label{fig:btsr_error}
 \end{figure}
@@ -117,7 +117,7 @@ Next, we present an evaluation of our method for obtaining tile map summaries. W
 
 \begin{figure*}[!ht]
  \centering
- \fbox{\includegraphics[width=\textwidth]{figures/timebox1.pdf}}
+ \fbox{\includegraphics[width=0.75\textwidth]{figures/timebox1.pdf}}
  \caption{Visualization of water consumption tile map summary in the city center of Alicante (map scale 1:5000).}
  \label{fig:alicante_example2}
 \end{figure*}
@@ -130,7 +130,7 @@ An example of the tile map visualization is illustrated in Figure~\ref{fig:alica
 
 \begin{figure*}[!ht]
  \centering
- \fbox{\includegraphics[width=\textwidth]{figures/timebox2.pdf}}
+ \fbox{\includegraphics[width=0.75\textwidth]{figures/timebox2.pdf}}
  \caption{Visualizing taxi dropoff tile map in Manhattan, NYC (map scale 1:10000).}
  \label{fig:nyc_example2}
 \end{figure*}
@@ -145,7 +145,7 @@ Another example of the tile map visualization, depicting an area in Manhattan, N
 \begin{table}[!ht]
 \centering
 \caption{Parameters in tests for tile map summaries}
-\begin{footnotesize}
+\begin{small}
 \begin{tabular}{lc} 
 \hline
 {\em Parameter} &{\em Values} \\
@@ -154,7 +154,7 @@ Timebox time range ($|p_t|$) & 1, {\bf 2}, 3, 4, 5 \\
 Timebox value range ($|p_v|$) & 1$\sigma$, 1.5$\sigma$, {\bf 2$\sigma$}, 2.5$\sigma$, 3$\sigma$ \\
 \hline
 \end{tabular}
-\end{footnotesize}
+\end{small}
 \label{tab:parameters2_vis}
 \end{table}
 
@@ -174,7 +174,7 @@ Figure~\ref{subfig:geo_iSAX_zoom} shows the traversal costs for different map sc
 
 Similar results are also observed for different timebox sizes, as depicted in Figure~\ref{subfig:geo_iSAX_timeboxes}. The taxi and water datasets almost instantly generate the summaries along all timebox sizes. As a reminder, the timebox size is measured in terms of number of SAX segments selected in the time axis and standard deviation range selected in the value axis. In the figure, time range $|p_t|$ denotes the number of SAX segments, whereas value range $|p_v|$ expresses the standard deviation range selected for each timebox. For larger timebox sizes, the index traversal is slower as expected, as more nodes tend to satisfy the rather loose constraints. For the same reasons, the response time is improved up to around 1500 milliseconds as the timebox size gets smaller.
 
-\begin{figure}[!t]
+\begin{figure}[!tb]
  \centering
  \subfloat[Response time for different map scales.]{\includegraphics[width=0.45\textwidth]{figures/geo_iSAX_zoom.pdf}\label{subfig:geo_iSAX_zoom}}
  \subfloat[Response time for different timebox sizes.]{\includegraphics[width=0.45\textwidth]{figures/geo_iSAX_timeboxes.pdf}\label{subfig:geo_iSAX_timeboxes}}\
@@ -182,11 +182,11 @@ Similar results are also observed for different timebox sizes, as depicted in Fi
 \label{fig:geo_iSAX_zoom_timebox}
 \end{figure}
 
-\begin{figure}[!t]
+\begin{figure}[!tb]
  \centering
- \subfloat[Accuracy in spatial domain.]{\includegraphics[width=0.30\textwidth]{figures/geo_iSAX_error_sp.pdf}\label{subfig:geo_iSAX_error_sp}}
- \subfloat[Accuracy in time series domain.]{\includegraphics[width=0.30\textwidth]{figures/geo_iSAX_tilemapDiff.pdf}\label{subfig:geo_iSAX_tilemapDiff}}
- \subfloat[Response time.]{\includegraphics[width=0.30\textwidth]{figures/geo_iSAX_time.pdf}\label{subfig:geo_iSAX_time}}\
+ \subfloat[Accuracy in spatial domain.]{\includegraphics[width=0.4\textwidth]{figures/geo_iSAX_error_sp.pdf}\label{subfig:geo_iSAX_error_sp}}
+ \subfloat[Accuracy in time series domain.]{\includegraphics[width=0.4\textwidth]{figures/geo_iSAX_tilemapDiff.pdf}\label{subfig:geo_iSAX_tilemapDiff}} \\
+ \subfloat[Response time.]{\includegraphics[width=0.45\textwidth]{figures/geo_iSAX_time.pdf}\label{subfig:geo_iSAX_time}}\
 \caption{Assessment of tile map summarization.}
 \label{fig:geo_iSAX_error}
 \end{figure}

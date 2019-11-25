@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \graphicspath{{Papers/SIGSpatial2017/}{Papers/SIGSpatial2018/}}
 
@@ -38,7 +38,7 @@ Given a set of time series $\mathcal{T}$, its MBTS consists of an \emph{upper bo
 \qed
 \end{mydefinition}
 
-\begin{figure}[!t]
+\begin{figure}[!tb]
  \centering
  \subfloat[MBTS in \tsr]{\includegraphics[width=0.3\textwidth]{figures/bounds_tsr.png}\label{subfig:tsr_mbts}}\hspace{8pt}
  \subfloat[Distance bounds with MBTS]{\includegraphics[width=0.3\textwidth]{figures/bounds_mindst.png}\label{subfig:mbts_bounds}}\hspace{8pt}
@@ -128,9 +128,9 @@ To overcome this issue, we present an optimized version of the \tsr, which we ca
 
 The \btsr index is built similarly to the \tsr index. To construct the time series bundles within each node, we rely on $k$-{\em means clustering}. To avoid confusion with the top-$k$ predicate in queries, next we symbolize with $\beta$ is the number of bundles to be created. The process is performed bottom-up, starting from the leaf nodes of the index. In each leaf node, the contained time series are clustered into $\beta$ bundles. Then, the MBTS of each bundle is computed and stored in the node. Each internal node receives all the MBTS of its children so as to compute its own $\beta$ bundles and respective set of MBTS. Thus, the process propagates upwards, until reaching the root of the tree.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
- \includegraphics[width=0.75\textwidth]{figures/btsr_tree.png}
+ \includegraphics[width=0.65\textwidth]{figures/btsr_tree.png}
  \caption{An example of a \btsr index.}
  \label{fig:btsr_tree}
 \end{figure}

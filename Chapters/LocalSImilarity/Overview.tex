@@ -4,11 +4,11 @@
 
 In this chapter, we introduce the measure of \textit{local similarity}, that can be applied on co-evolving (i.e., time aligned) time series. Two co-evolving time series are locally similar if the pairwise distance of their values per timestamp does not exceed a given threshold during a time interval, that lasts at least a pre-defined number of consecutive timestamps. Based on this new similarity measure, we introduce two novel approaches for efficiently detecting all possible pairs and \textit{bundles} (groups) of time series that are locally similar within a given dataset. Additionally, we utilize our hybrid \btsr index to answer several hybrid queries on geolocated time series based on local similarity and introduce an extension to \btsr, named \sbtsr that significantly speeds up the process.
 
-The bundle discovery problem we address in this Thesis resembles the problem of \textit{flock discovery in moving objects}, where the goal is to identify sufficiently large groups of objects that move close to each other over a sufficiently long period of time. However, to the best of our knowledge, ours is the first work to address the problems of locally similar pair and bundle discovery over co-evolving time series. 
+The bundle discovery problem we address in this thesis resembles the problem of \textit{flock discovery in moving objects}, where the goal is to identify sufficiently large groups of objects that move close to each other over a sufficiently long period of time. However, to the best of our knowledge, ours is the first work to address the problems of locally similar pair and bundle discovery over co-evolving time series. 
 
 \paragraph{Local Pair and Bundle Discovery.} Discovering such pairs and bundles is useful in various applications. For instance, public utility companies employ smart meters to collect time series measuring consumption per household (e.g., for water or electricity). Identifying such bundles of time series (i.e., a number of similar subsequences over certain time intervals) can reveal similar patterns of consumption among users, allowing for more personalized billing schemes. In finance, examining time series of stock prices can identify pairs or bundles of stocks trending similarly at competitive prices over some trading period, hence offering precious insight for possible future investments.
 
-\begin{figure}[b]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/pair_flock_ex.png}
     \caption{A pair and a bundle of locally similar time series.}
@@ -19,7 +19,7 @@ Figure~\ref{fig:pair_flock_ex} illustrates an example comprising four time serie
 
 A real-world example is depicted in Figure~\ref{fig:water_real_ex}. These two time series represent per-hour average water consumption during a day of the week for two different households. We can observe that their respective values per timestamp (at granularity of hours, in this example) are very close to each other during a certain time period (hours 2-11), but are farther apart in the rest. Hence, an algorithm that measures the global similarity between two time series might not consider this pair as similar; however, the subsequences inside the gray strip are clearly pairwise similar, and might indicate an interesting pattern. Identifying such local similarities within a sufficiently long time interval is our focus in this chapter.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/water_real_ex.png}
     \caption{Pair of locally (but not globally) similar time series.} 
@@ -28,7 +28,7 @@ A real-world example is depicted in Figure~\ref{fig:water_real_ex}. These two ti
 
 Furthermore, Figure \ref{fig:bundles_water} depicts several bundles of locally similar time series detected by our algorithms in a real-world dataset containing smart water meter measurements. The detected bundles represent different per-hour average water consumption patterns during a week. There is a wider pattern detected among 6 households during the first 30 hours of the week indicating reduced consumption (probably no permanent residence). The orange and yellow patterns indicate different morning routines during the third and fourth day of the week. The green and purple patterns represent a reduction in consumption during the late hours of the fourth and sixth day, respectively, with some intermediate consumption taking place during the night. Finally, the shorter red and light blue bundles suggest different evening patterns for two other days (respectively, decreasing and increasing consumption).
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/bundles_water.png}
     \caption{Bundles of locally similar time series.}
@@ -49,7 +49,7 @@ Motivated by this observation, in this work we extend our previous approach on h
 
 Combining this local similarity constraint with a filter on {\em spatial distance} leads to a novel set of hybrid queries. Figure~\ref{fig:example_query} shows an example with a query time series $T_q$ searching over a set of time series $T_1,\dots,T_9$ for those within radius $\rho$ from its location and also locally similar to $T_q$. In particular, with respect to a given $\epsilon$, results should also be locally similar to $T_q$ for at least 5 consecutive timestamps. Qualifying results include $T_2$ with local similarity score $\sigma_2 = 5$ (bottom chart), and $T_7$ with $\sigma_7 = 7$ (top chart).
 
-\begin{figure}[!t]
+\begin{figure}[!tb]
  \centering
  \includegraphics[width=0.5\textwidth]{Figures/local_sim_geoloc.png}
 \caption{Retrieving geolocated time series based on spatial distance and local similarity.}

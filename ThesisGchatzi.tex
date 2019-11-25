@@ -4,11 +4,14 @@
 \documentclass[12pt,a4paper,twoside]{book}
 
 \usepackage{fontspec}
-\setromanfont{Times New Roman}
-\setmainfont[Mapping=tex-text]{Times New Roman}
+%\setromanfont{Times New Roman}
+%\setmainfont[Mapping=tex-text]{Times New Roman}
+
+\setmainfont[ItalicFont=cmunsl.ttf,BoldFont=cmunbx.ttf,SmallCapsFont=cmunbx.ttf]{cmunrm.ttf}
 
 %\usepackage[LGR]{fontenc}
 \usepackage[english, greek]{babel}
+\usepackage{xgreek}
 %\usepackage[utf8]{inputenc}
 %\usepackage[utf8]{inputenc}
 \usepackage{ragged2e}
@@ -82,8 +85,8 @@
 \newcommand{\btsr}{\mbox{BTSR-tree}\xspace}
 \newcommand{\isax}{\mbox{\texorpdfstring{$i$}SSAX}\xspace}
 \newcommand{\hisax}{\mbox{geo-\texorpdfstring{$i$}SSAX}\xspace}
-\newcommand{\opt}{\mbox{\em SimJoinOPT}\xspace}
-\newcommand{\base}{\mbox{\em SimJoinMR}\xspace}
+\newcommand{\opt}{\mbox{SimJoinOPT}\xspace}
+\newcommand{\base}{\mbox{SimJoinMR}\xspace}
 \newcommand{\sbtsr}{\mbox{\texorpdfstring{$\mathcal{S}$}BBTSR-tree}\xspace}
 \renewcommand{\l}{\ell}
 \renewcommand{\baselinestretch}{.97}

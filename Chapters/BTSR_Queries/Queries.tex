@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \graphicspath{{Papers/SIGSpatial2017/}{Papers/SIGSpatial2018/}}
 
@@ -13,8 +13,8 @@ As already mentioned, for the efficient evaluation of hybrid similarity search q
 \paragraph{$Q_{bb}(T_q, \theta_{sp}, \theta_{ts})$.} To evaluate this query, we recursively traverse the \btsr starting from the root. For each node $N$, the following two conditions are checked: (a) $mindist_{sp}(T_q, N) \leq \theta_{sp}$ and (b) $mindist_{ts}(T_q, N) \leq \theta_{ts}$. If either of these conditions returns false, $N$ is pruned. Once a leaf node is reached, the geolocated time series contained therein are retrieved, and each one is checked if it qualifies the query criteria. The steps for processing this query are shown in detail in Algorithm \ref{alg:double_range_query}.
 
 \begin{algorithm}[!t]
-\begin{small}
 	\DontPrintSemicolon
+	\begin{footnotesize}
 	\BlankLine
 	\Begin{
 		$R \leftarrow \emptyset$ \\
@@ -38,9 +38,9 @@ As already mentioned, for the efficient evaluation of hybrid similarity search q
 			}
 		}
 	}
+	\end{footnotesize}
 	\caption{$Q_{bb}(T_q, \theta_{sp}, \theta_{ts})$}
-	\label{alg:double_range_query}
-\end{small}		
+	\label{alg:double_range_query}		
 \end{algorithm}
 
 
@@ -51,8 +51,8 @@ Assume that we are evaluating a $Q_{bk}(T_q, \theta_{sp}, k)$ query. Initially, 
 Evaluating a $Q_{kb}(T_q, k, \theta_{ts})$ is straightforward; the treatment of the spatial and the time series dimensions is simply reversed.
 
 \begin{algorithm}[!t]
-\begin{small}
 	\DontPrintSemicolon
+	\begin{footnotesize}
 	\BlankLine
 	\Begin{
 		$R \leftarrow \emptyset$ \\
@@ -84,9 +84,9 @@ Evaluating a $Q_{kb}(T_q, k, \theta_{ts})$ is straightforward; the treatment of 
 		}
 		$return(R)$
 	}
+	\end{footnotesize}
 	\caption{$Q_{bk}(T_q, \theta_{sp}, k)$}
 	\label{alg:range_topk_query}	
-\end{small}	
 \end{algorithm}
 
 \paragraph{$Q_{hb}(T_q, \theta_h, \gamma)$ and $Q_{hk}(T_q, k, \gamma)$.} These queries apply a boolean and a top-$k$ filter, respectively. In both cases, this is applied on the hybrid distance $dist_h(T_q, T)$ of the query $T_q$ to each of the candidate geolocated time series $T$.
@@ -124,8 +124,8 @@ Suppose that at a given iteration, node $R$ in the first \isax needs to be check
 Eventually, when the leaf level is reached in both trees, we compare each combination of their respective contents (Lines 9-13). Each geolocated time series from leaf $R$ of the first \isax is checked with its counterparts in leaf $S$ of the second \isax. Since raw time series data is fully accessible at the leaf level (including locations), refinement of candidates is based not only on their distance $dist_{ts}$ in the time series domain, but also on their spatial distance $dist_{sp}$. If both distances are below the respective constraints, then this specific pair qualifies for the final result $Q$ to the query. The algorithm terminates once there are no remaining pairs of leaves to check.
 
 \begin{algorithm}[!ht]
-\begin{small}
   \DontPrintSemicolon
+  \begin{footnotesize}
   \KwIn{Nodes $R$, $S$, spatial constraint $\epsilon_{sp}$, time series constraint $\epsilon_{ts}$}
   \KwOut{Set $Q$ of pairs of geolocated time series satisfying constraints}
   \BlankLine
@@ -153,9 +153,9 @@ Eventually, when the leaf level is reached in both trees, we compare each combin
       }
     }
   }
+  \end{footnotesize}
   \caption{$SimJoinSAX(R, S, \epsilon_{sp}, \epsilon_{ts})$}
   \label{alg:sim_joins_isax}
-\end{small}   
 \end{algorithm}
 
 \subsubsection{Hybrid Filtering using BTSR-Trees}
@@ -164,7 +164,7 @@ This method makes use of a hybrid \btsr index per dataset $\mathcal{T}_{R}, \mat
 
 In case that the currently examined entries $R$ and $S$ are internal (directory) nodes, a nested-loop check finds which of their descendants may contain candidate results (Lines 1-6). In particular, for each child entry $N_R$ of node $R$, we calculate a buffer rectangle by expanding its respective MBR by distance $\epsilon_{sp}$. In case that this buffer intersects with the MBR of entry $N_S$ from node $S$, whereas also their MBTS do not deviate by more than $\epsilon_{ts}$, then search should be recursively applied against those two entries $N_R, N_S$. Clearly, if neither of these criteria is met, those candidate entries cannot possibly contain any matching time series. 
 
-Note that this step involves comparison between two MBTSs. Consider two MBTSs $B_1 = (B_1^{\sqcup}, B_1^{\sqcap})$ and $B_2 = (B_2^{\sqcup}, B_2^{\sqcap})$, each constructed according to Eq.~\ref{eq:bounds} over two disjoint subsets of time series data. We compute their {\em deviation} $dist_{MBTS}$ by first comparing the lower bounding time series of the former with the upper bounding time series of the latter per time point $i \in \{ 1, \dots, n \}$, depending on which of these two values is larger, i.e.:
+Note that this step involves comparison between two MBTS. Consider two MBTS $B_1 = (B_1^{\sqcup}, B_1^{\sqcap})$ and $B_2 = (B_2^{\sqcup}, B_2^{\sqcap})$, each constructed according to Eq.~\ref{eq:bounds} over two disjoint subsets of time series data. We compute their {\em deviation} $dist_{MBTS}$ by first comparing the lower bounding time series of the former with the upper bounding time series of the latter per time point $i \in \{ 1, \dots, n \}$, depending on which of these two values is larger, i.e.:
 \begin{equation}
  \begin{split}
   \delta_i = \begin{cases}
@@ -179,13 +179,13 @@ Note that this step involves comparison between two MBTSs. Consider two MBTSs $B
 \begin{equation} \label{eq:dist_mbts}
 dist_{MBTS}(B_1, B_2) = \frac{1}{n}\sqrt{\displaystyle \sum_{i=1}^{n}({\delta}_i)^2}
 \end{equation}
-Quite importantly, this measure is a {\em lower bound} of the Euclidean distance $dist_{ts}(T_1, T_2)$  between two time series $T_1, T_2$ that are enclosed in MBTSs $B_1, B_2$, respectively. Consider the situation at a given time point $i \in \{ 1, \dots, n \}$. In case that $B_1^{\sqcup}.v_i \geq B_2^{\sqcap}.v_i$, it is straighforward that $T_1.v_i \geq B_1^{\sqcup}.v_i \geq B_2^{\sqcap}.v_i \geq T_2.v_i$ by definition of the MBTS, hence ${\delta}'_i = T_1.v_i - T_2.v_i \geq {\delta}_i$. This also holds for the other branches of Eq.~\ref{eq:delta_timepoint}. But, taking the Euclidean norm of these ${\delta}'_i$ values over all time points expresses the time series similarity according to Eq.~\ref{eq:dist_ts}. Overall, this confirms that $dist_{ts}(T_1, T_2) \geq dist_{MBTS}(B_1, B_2)$, so checking with MBTSs does not cause any false misses.
+This measure is a {\em lower bound} of the Euclidean distance $dist_{ts}(T_1, T_2)$  between two time series $T_1, T_2$ that are enclosed in MBTSs $B_1, B_2$, respectively. Consider the situation at a given time point $i \in \{ 1, \dots, n \}$. In case that $B_1^{\sqcup}.v_i \geq B_2^{\sqcap}.v_i$, it is straighforward that $T_1.v_i \geq B_1^{\sqcup}.v_i \geq B_2^{\sqcap}.v_i \geq T_2.v_i$ by definition of the MBTS, hence ${\delta}'_i = T_1.v_i - T_2.v_i \geq {\delta}_i$. This also holds for the other branches of Eq.~\ref{eq:delta_timepoint}. But, taking the Euclidean norm of these ${\delta}'_i$ values over all time points expresses the time series similarity according to Eq.~\ref{eq:dist_ts}. Overall, this confirms that $dist_{ts}(T_1, T_2) \geq dist_{MBTS}(B_1, B_2)$, so checking with MBTSs does not cause any false misses.
    
 If both $R$ and $S$ are leaves, the algorithm retrieves all time series from either leaf and checks every combination against both criteria (Lines 10-14). If a time series from $\mathcal{T}_{R}$ and a time series from $\mathcal{T}_{S}$ are close enough in space (i.e., less than $\epsilon_{sp}$) and also similar in the time series domain by $\epsilon_{ts}$, this pair is issued as result.
 
 \begin{algorithm}[!ht]
-\begin{small}
   \DontPrintSemicolon
+  \begin{footnotesize}
   \KwIn{Nodes $R$, $S$, spatial constraint $\epsilon_{sp}$, time series constraint $\epsilon_{ts}$}
   \KwOut{Set $Q$ of pairs of geolocated time series satisfying constraints}
   \BlankLine
@@ -213,9 +213,9 @@ If both $R$ and $S$ are leaves, the algorithm retrieves all time series from eit
       }
     }
   }
+  \end{footnotesize}
   \caption{$SimJoinBTSR(R, S, \epsilon_{sp}, \epsilon_{ts})$}
   \label{alg:sim_joins_btsr}
-\end{small}
 \end{algorithm}
 
 Handling the case of \btsr indices with different height is handled as in R-trees \cite{DBLP:conf/sigmod/BrinkhoffKS93}. Without loss of generality, let the first \btsr (over $\mathcal{T}_{R}$) be shorter than the second \btsr (over $\mathcal{T}_{S}$). Then, once a leaf entry $R$ is reached in the former, comparisons are made against any subtrees under nodes $N_S$ in the latter (Lines 7-9). In case that both criteria are met, we descend this latter \btsr and recursively check for similarity joins between its children entries with the same leaf entry $R$ fixed in the first \btsr. Eventually, the leaf level in the second \btsr will be reached and refinement against the raw time series on both the spatial and time series criteria can yield the final results.  
@@ -230,7 +230,7 @@ As any join query over large datasets, computing hybrid similarity joins over mi
 
 Typically, in MapReduce-based processing, both input datasets $\mathcal{T}_{R}$, $\mathcal{T}_{S}$ should be divided into smaller chunks that may be efficiently processed in a distributed fashion by a number of worker nodes. In our case, distributing geolocated time series data by their spatial location is straightforward and can be effectuated much faster as opposed to a times series-based subdivision that may need to examine long sequences. Our method employs a subdivision $\mathcal{P}$ into {\em disjoint partitions} over the spatial area covering all locations in either dataset $\mathcal{T}_{R}$, $\mathcal{T}_{S}$. Partitioning $\mathcal{P}$ is {\em identical} over both datasets. Without loss of generality, we consider $\mathcal{P}$ as a uniform grid tessellation into $g \times g$ square equi-sized cells, but our method can be easily adjusted to other space-driven subdivisions into disjoint regions (e.g., quadtrees). Choosing a suitable grid granularity $g$ over each axis mostly depends on dataset size, but also on the number and processing power of available nodes in cluster infrastructures.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \includegraphics[width=0.65\textwidth]{figures/grid_exchange_slices.png}
  \caption{Blocks in cross-partition search for a partition $p$.}
@@ -253,8 +253,8 @@ Furthermore, at each block tier, a {\em local index} is built for every derived 
 \newcommand{\nonl}{\renewcommand{\nl}{\let\nl\oldnl}}
 
 \begin{algorithm}[!ht]
-\begin{small}
   \DontPrintSemicolon
+  \begin{footnotesize}
   \KwIn{dataset $\mathcal{T}_{R}$, dataset $\mathcal{T}_{S}$, spatial constraint $\epsilon_{sp}$, time series constraint $\epsilon_{ts}$, index method $\mathcal{X}$ (e.g., \btsr or R-tree)}
        \KwOut{Set $Q$ of pairs of geolocated time series satisfying constraints}
 
@@ -297,10 +297,9 @@ Furthermore, at each block tier, a {\em local index} is built for every derived 
     }
     \KwRet $Q$ \com*[f]{results collected from all pairs of blocks}
   }
-
+  \end{footnotesize}
   \caption{$SimJoinMR(\mathcal{T}_{R},\mathcal{T}_{S}, \epsilon_{sp}, \epsilon_{ts}, \mathcal{X} )$}
   \label{alg:simjoin_mr}
-\end{small}
 \end{algorithm}
 
 Once pairs of blocks need be checked at each tier (either $L_{\mathcal{P}}$ for partitions, or $L_{\mathcal{B}}$ for bands, or $L_{\mathcal{C}}$ for boxes), {\em blockwiseSimJoin} (Lines 19-25) takes advantage of the created indices and applies the respective method from Section~\ref{subsec:sim_join} to return their results. Each pair of blocks at any tier can be processed independently. Hence, for a given partitioning $\mathcal{P}$, once the query is submitted, the required subsets and their indices can be prepared in a {\em distributed} fashion and the respective block-wise checking can be evaluated {\em in parallel}. For a given partition $p$ (first tier), subsets from both datasets are assigned to the same worker node. This policy is also applied in the case of blocks that need to be checked: the worker responsible for a given partition $p$ receives the data and index concerning geolocated time series from the other dataset within an adjacent block. Such processing fits well under the {\em MapReduce} paradigm; mappers assign data subsets to workers according to partitioning scheme $\mathcal{P}$. Each worker employs reduce operations to generate the respective indices and store them on HDFS. At query time, a map procedure assigns the indices that reside within each partition to a reducer, which calculates the local results. Simultaneously, mappers shuffle data per block to workers responsible for their neighboring partitions. Finally, a reduce operation is carried out on each pair of such blocks to compute their similarity joins and to store results on HDFS.

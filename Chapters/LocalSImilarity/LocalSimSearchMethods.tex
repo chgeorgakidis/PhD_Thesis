@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \subsection{LS-Queries Using the \btsr}
 \label{subsec:local_sim_search_methods}
@@ -30,7 +30,7 @@ For {\em time series similarity}, we exploit the MBTS stored within each node. C
 \noindent that reflects the {\em maximum} interval $I$ of consecutive timestamps where the distance computed by Eq.~\ref{eq:mindist_ts_local_sim} does not exceed margin $\epsilon$. 
 This value is an upper bound of the local similarity scores of $T_q$ with any time series enclosed in this MBTS. Figure \ref{fig:sim_mbts} shows that $T_q$ deviates from the given MBTS by no more than $\epsilon$ during two intervals: one consisting of $|I_1|=5$ consecutive timestamps and a smaller one with only $|I_2|=2$ timestamps (shown as square points). So, the local similarity bound for this MBTS is $\sigma_{B}=5$.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{Figures/sim_mbts.png}
     \caption{Local similarity check against an MBTS.}
@@ -68,7 +68,7 @@ Figure \ref{fig:checkpoints} shows an example with checkpoints placed along the 
 
 Figure \ref{fig:sim_mbts_checkpoints} exemplifies the use of checkpoints for comparing $T_q$ to an MBTS of a node for $\delta=5$ timestamps. Instead of sequentially performing 11 comparisons until verifying that local similarity score $\sigma$ is at least $\delta$ (i.e., we stop the verification at $t=11$, once $\sigma=5$), we check only around the checkpoints. At the leftmost checkpoint $c_1$, no local similarity is found ($T_q$ is farther than $\epsilon$ from the MBTS), so we skip directly to checkpoint $c_2$. Since $T_q$ differs by less than $\epsilon$ at $c_2$, we need to compare values backward and forward, up to the previous and next checkpoint, respectively. This requires only 6 comparisons instead of 11 to decide that this node may contain candidates. Next, we describe how probing with checkpoints is applied during evaluation of LS-queries.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{Figures/sim_mbts_checkpoints.png}
     \caption{Local similarity with a MBTS using checkpoints.}
@@ -79,9 +79,9 @@ Figure \ref{fig:sim_mbts_checkpoints} exemplifies the use of checkpoints for com
 
 Verification of MBTS against the local similarity constraints $\epsilon, \delta$ is applied using checkpoints (Lines~15-36). This verification concerns each MBTS in a given node $N'$. At each checkpoint $c$, we first verify whether its $mindist_{ts}^c$ to query $T_q$ is at most $\epsilon$ (Line 18). If so, we first scan backward to inspect whether there are at least $\delta$ consecutive timestamps where $T_q$ deviates by at most $\epsilon$ from this MBTS (Lines 20-27). Similarly, we probe forward from checkpoint $c$ (Lines 28-35). In either case, once local similarity no longer holds at a timestamp, probing skips to the next checkpoint. If the check fails for all checkpoints of all MBTSs, then this node cannot contain any results (Line 36).
 
-\SetAlFnt{\small}
 \begin{algorithm}[!t]
     \DontPrintSemicolon
+    \begin{footnotesize}
     \vspace{4pt}
     $R \leftarrow \emptyset, List \leftarrow Root.entries, C \leftarrow determineCheckpoints(\delta)$ \\
     \While{$List \neq \emptyset$}{
@@ -142,7 +142,7 @@ Verification of MBTS against the local similarity constraints $\epsilon, \delta$
         }
         \KwRet $False$
     }
-
+    \end{footnotesize}
     \caption{$Q_{rr}(T_q, \rho, \epsilon, \delta)$}
     \label{alg:query_r}
 \end{algorithm}
@@ -154,9 +154,9 @@ Verification of MBTS against the local similarity constraints $\epsilon, \delta$
 \item[(iii)] If the element is an inner node, we iterate over its children and only push back to the queue the ones whose MBTSs are verified against $\epsilon$ and $\delta$ using checkpoints (Lines 15-19).
 \end{enumerate}
 
-\SetAlFnt{\small}
 \begin{algorithm}[!t]
     \DontPrintSemicolon
+    \begin{footnotesize}
     $R \leftarrow \emptyset$ \\
     $P.push(Root)$ \\
     $C \leftarrow determineCheckpoints(\delta)$ \\
@@ -186,6 +186,7 @@ Verification of MBTS against the local similarity constraints $\epsilon, \delta$
         }
     }
     \KwRet R
+    \end{footnotesize}
     \caption{$Q_{kr}(T_q, k, \epsilon, \delta)$}
     \label{alg:query_k} 
 \end{algorithm}
@@ -200,9 +201,9 @@ Once $R$ exceeds capacity $k$, its last element is evicted to make room for the 
 
 The process terminates once the top element in $P$ has local similarity less than $\delta$ (Lines 6-7). The result is the contents of $R$.
 
-\SetAlFnt{\small}
 \begin{algorithm}[!t]
     \DontPrintSemicolon
+    \begin{footnotesize}
     $R \leftarrow \emptyset$ \\
     $P.push(Root)$ \\
     $\delta \leftarrow 1$ \\
@@ -242,6 +243,7 @@ The process terminates once the top element in $P$ has local similarity less tha
         }
     }
     \KwRet R
+    \end{footnotesize}
     \caption{$Q_{rk}(T_q, k, \rho)$}
     \label{alg:query_ks}    
 \end{algorithm}
@@ -255,10 +257,10 @@ The \btsr index uses $k$-means clustering to cluster the time series under each 
 
 To reduce the amount of overlap within the MBTSs of nodes, we introduce an extended version of the \btsr, named \sbtsr. \sbtsr attempts to eliminate as much overlap as possible, through segmentation of time series. Figure~\ref{subfig:bundles_part} depicts the intuition. If we segment the time series before applying $k$-means, the resulting MBTSs for each segment tend to be tighter, eliminating the excessive overlap $A$ from Figure~\ref{subfig:bundles}. The \sbtsr is built similarly to \btsr. The only difference is that the MBTSs of each node are calculated \textit{per segment}. In this method, we assume a pre-defined number $s$ of segments, but segmentation is orthogonal to our problem and can be carried out by applying existing methods like \cite{bingham2006segmentation}. Ultimately, \sbtsr allows for more aggressive pruning when traversing the index.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
  \centering
- \subfloat[Example of a node's MBTS.]{\includegraphics[width=0.45\textwidth]{Figures/bundles_node.png}\label{subfig:bundles}}
- \subfloat[Segmenting can eliminate whitespace.]{\includegraphics[width=0.45\textwidth]{Figures/bundles_node_partition.png}\label{subfig:bundles_part}}
+ \subfloat[Example of a node's MBTS.]{\includegraphics[width=0.75\textwidth]{Figures/bundles_node.png}\label{subfig:bundles}} \\
+ \subfloat[Segmenting can eliminate whitespace.]{\includegraphics[width=0.75\textwidth]{Figures/bundles_node_partition.png}\label{subfig:bundles_part}}
  \vspace{-10pt} 
  \caption{Segmenting time series yields tighter MBTS.}
  \label{fig:proof_partition}
@@ -270,7 +272,7 @@ A downside of the segmentation approach is the loss of the MBTS continuity acros
 
 To evaluate LS-queries, traversal of the \sbtsr index follows a similar rationale to the procedure in Section~\ref{sec:checkpoint_search}. For each checkpoint $c$, we first obtain the segment where it falls in, and we scan each MBTS leftward and rightward from $c$, as discussed in Section~\ref{sec:checkpoint_search}. If we cross the border to another segment, the available bit-vectors directly identify the MBTS that need be examined in this neighboring segment. This propagates until the local similarity constraints ($\epsilon$ and $\delta$) are satisfied. Figure~\ref{fig:part_checkpnt} illustrates an example of a node verification. Let us consider a predetermined number of three segments and the corresponding MBTS of each segment for that node. Suppose that there exists a checkpoint $c$ on the second segment. To verify whether this node satisfies the local similarity constraints, we start from checkpoint $c$ and we check leftwards whether $mindist_{ts}^{i} \leq \epsilon$ for each timestamp. If the currently examined timestamp falls in the first segment, we fetch the corresponding MBTS and bit-vectors and continue checking whether $mindist_{ts}^{i} \leq \epsilon$ in both MBTS (green shaded), as their bit-vectors both indicate common members with the first one in segment 2. A similar procedure is followed rightwards, where we only have to check the first MBTS, according to the bit-vectors.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{Figures/partition_checkpoint_check.png}
     \caption{Example of verifying a \sbtsr node.}

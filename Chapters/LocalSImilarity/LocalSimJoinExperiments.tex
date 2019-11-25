@@ -55,7 +55,7 @@ $\mu$ (\% of dataset size, i.e., 822) & 0.5\%, 0.75\%, \textbf{1\%}, 1.25\%, 1.5
 \end{table}
 
 \paragraph{Varying $\delta$}
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \subfloat[Bundle discovery execution time]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip, width=0.45\textwidth]{figures/plots/bundles/varying_delta.png}\label{subfig:var_delta}}
  \subfloat[Bundle discovery results]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/bundles/varying_delta_bars.png}\label{subfig:var_delta_bars}} \\
@@ -70,7 +70,7 @@ Figure \ref{fig:exp1} depicts the results for varying minimal duration $\delta$.
 Regarding pair discovery, since it is an overall faster process, the differences in terms of efficiency are smaller, but still apparent. In this case, the execution time (Figure \ref{subfig:var_delta_bars_pairs}) is more abruptly reduced in both SL and CP methods, since less subsequences qualify as pairs. The number of results (Figure \ref{subfig:var_delta_bars_pairs_bars}) is now naturally much larger, as far more pairs are expected to be verified if bundles exist. The same stands for the maximum duration among pairs, which tend to last longer compared to bundles. Since a pair is actually a bundle with $\mu$=2 members, it is easier to find local similarity over longer intervals between two subsequences rather than an increased number of them. The maximum duration, as in bundle discovery, remains the same as $\delta$ increases, since this corresponds to the same pair in the results. 
 
 \paragraph{Varying $\epsilon$}
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \subfloat[Bundle discovery execution time]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/bundles/varying_epsilon.png}\label{subfig:var_eps}}
  \subfloat[Bundle discovery results]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/bundles/varying_epsilon_bars.png}\label{subfig:var_eps_bars}} \\
@@ -85,7 +85,7 @@ Varying threshold $\epsilon$ for bundle discovery slightly incurs more execution
 Regarding pair discovery, the results are again similar to bundle discovery for varying $\epsilon$. For very small $\epsilon$ values of up to 7\% of the value range, the CP algorithm returns results almost instantly. The SL approach is at least five times slower, with its performance deteriorating more rapidly with increasing $\epsilon$ values. Again, as in bundle discovery, the results are growing with greater $\epsilon$, as does the maximum duration among pairs, especially for $\epsilon$ equal to 8\% of the value range.
 
 \paragraph{Varying $\mu$}
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \subfloat[Bundle discovery execution time]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/bundles/varying_mu.png}\label{subfig:var_mu}}
  \subfloat[Bundle discovery results]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/bundles/varying_mu_bars.png}\label{subfig:var_mu_bars}}
@@ -100,7 +100,7 @@ When varying the minimum membership parameter $\mu$ in bundle discovery (Figure 
 To evaluate the efficiency of our methods, we used the synthetic dataset. Regarding parameter values, as in the previous experiments, we performed preliminary tests to extract ranges of values where the algorithms return a reasonable number of results. Table \ref{tab:parameters2} lists the range of values for all parameters used in these efficiency tests for bundle and pair discovery, with the default values emphasized in bold (again, $\mu$ is not applicable in pair discovery).
 
 \paragraph{Varying Dataset Size}
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \subfloat[Bundle discovery]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/bundles/varying_dataset_size.png}\label{subfig:var_dat_size}}
  \subfloat[Pair discovery]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/pairs/varying_dataset_size.png}\label{subfig:var_dat_size_pairs}}
@@ -130,7 +130,7 @@ $\mu$ (\% of dataset size) & \textbf{1.25\%} \\
 Figure \ref{fig:exp4} depicts the performance comparison between CP and SL algorithms for bundle and pair discovery. We omit cases where execution of an algorithm was taking more than 15 hours (cutoff). As illustrated in Figure \ref{subfig:var_dat_size}, an increase in the dataset size leads to a very abrupt deterioration of performance for the SL algorithm of up to several hours of execution for 20,000 time series. For larger dataset sizes, the execution time was significantly longer than the cutoff time. On the other hand, CP reports results in all cases. Its execution time increases for larger dataset sizes, but manages to finish in a few hours in the worst case (for 50,000 time series). It is worth noting that membership parameter $\mu$ is more relaxed for larger dataset sizes, as it is expressed in terms of percentage of the total number of time series in the dataset. This explains the slight improvement in performance  for dataset sizes of 20,000 and 30,000 for the CP method. In general, CP is more than an order of magnitude faster than SL, which also stands for the case of pair discovery, as illustrated in Figure \ref{subfig:var_dat_size_pairs}. As the number of time series in the dataset grows, it is natural that more pairs will be detected, hence the linear increase in the execution cost for the CP algorithm. Of course, baseline SL requires more time, as it must check many more combinations of time series.
 
 \paragraph{Varying Time Series Length}
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \subfloat[Bundle discovery]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/bundles/varying_time_series_length.png}\label{subfig:var_ts_length}}
  \subfloat[Pair discovery]{\includegraphics[trim=0.5cm 0.5cm 0.5cm 0.5cm, clip,width=0.45\textwidth]{figures/plots/pairs/varying_time_series_length.png}\label{subfig:var_ts_length_pairs}}

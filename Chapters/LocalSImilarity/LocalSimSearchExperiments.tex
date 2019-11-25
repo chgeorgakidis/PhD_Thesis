@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \subsection{Experimental Evaluation}
 \label{subsec:local_sim_search_exp}
@@ -40,7 +40,7 @@ Next, we report results from a comprehensive evaluation of our methods against r
 
 We compare the average per query execution time for all three queries using sweep line and checkpoint methods on \btsr and the checkpoint method on \sbtsr.
 
-\begin{figure}[ht!]
+\begin{figure}[!tb]
 \centering
 \subfloat{\fbox{\includegraphics[width=0.35\textwidth]{Figures/legend.png}}}
 \\
@@ -58,7 +58,7 @@ We compare the average per query execution time for all three queries using swee
 
 More specifically, for the {\em crime} dataset, relaxing $\rho$ (Figure \ref{subfig:var_epsSP_crime}) has a negative impact on all three methods as more nodes have to be accessed and pruning depends mostly on the $\epsilon$ value. \sbtsr increasingly outperforms the rest as $\rho$ increases, due to its more aggressive pruning on local similarity. For the case of increasing $\epsilon$ (Figure \ref{subfig:var_epsTS_crime}), the result is the opposite, as this way the parameter is relaxed and more nodes get accessed. For very large $\epsilon$ values, pruning is solely based on spatial distance and all approaches perform similarly. Finally, increasing $\delta$ (Figure \ref{subfig:var_delta_crime}) also increases the difference in performance among the three approaches, while it also reduces the average query response time. This is due to large numbers of subsequences qualifying for small $\delta$ values, resulting in more node accesses. As $\delta$ increases, pruning is more rapidly improved in the case of \sbtsr due to its tighter bounds.
 
-\begin{figure}[ht!]
+\begin{figure}[!tb]
 \centering
 \subfloat{\fbox{\includegraphics[width=0.35\textwidth]{Figures/legend.png}}}
 \\
@@ -78,9 +78,9 @@ Another observation is that the execution cost for queries against the Taxi data
 
 \paragraph{$Q_{kr}(T_q, k, \epsilon, \delta)$.} Figures \ref{subfig:var_k_crime}, \ref{subfig:var_k_flickr} and \ref{subfig:var_k_taxi} depict the results for the $Q_{kr}(T_q, k, \epsilon, \delta)$ query for the three datasets. As $k$ increases, more nodes have to be traversed in order to fetch the additional results, and the execution time increases for all methods. Nevertheless, \sbtsr still clearly outperforms the other two algorithms.
 
-\paragraph{$Q_{rk}(T_q, k, \rho)$.} Finally, Figures \ref{subfig:var_ks_crime}, \ref{subfig:var_ks_flickr} and \ref{subfig:var_ks_taxi} depict the results for the $Q_{rk}(T_q, k, \rho)$ query. In this case, the performance deterioration as $k$ increases is less abrupt, especially for the crime dataset, as usually the top-$k$ results are spatially closely located and are retrieved quickly. Again, the largest and smallest differences are spotted on the Flickr and taxi datasets, respectively.
+\paragraph{$Q_{rk}(T_q, k, \rho)$.} Figures \ref{subfig:var_ks_crime}, \ref{subfig:var_ks_flickr} and \ref{subfig:var_ks_taxi} depict the results for the $Q_{rk}(T_q, k, \rho)$ query. In this case, the performance deterioration as $k$ increases is less abrupt, especially for the crime dataset, as usually the top-$k$ results are spatially closely located and are retrieved quickly. Again, the largest and smallest differences are spotted on the Flickr and taxi datasets, respectively.
 
-\begin{figure}[ht!]
+\begin{figure}[!tb]
 \centering
 \subfloat{\fbox{\includegraphics[width=0.35\textwidth]{Figures/legend.png}}}
 \\

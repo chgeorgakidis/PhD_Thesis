@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \subsection{Pair Discovery}
 \label{subsec:local_sim_join_methods}
@@ -13,7 +13,7 @@ To reduce the candidate pairs that need be checked at each timestamp $t$, we dis
 
 To detect all candidate pairs and avoid cross-checking in every two adjacent bins we consider a \textit{value range} of size $\epsilon$, whose upper endpoint coincides with each value under consideration at time $t$. Then, all values of time series contained within this range, form candidate pairs (see Figure~\ref{fig:index}). Obviously, values contained in the same bin $j$ can form candidate pairs. Then, we can cross-check each value in bin $j$ with values in bin $j+1$ for additional candidates with value difference at most $\epsilon$, as indicated with the red (right) range.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.25\textwidth]{figures/index.png}
     \caption{Discretization of time series values at timestamp $t$.}
@@ -90,7 +90,7 @@ However, searching over all timestamps in such an exhaustive manner can be expen
 
 To prune the search space, we consider \textit{checkpoints} along the time axis, so that searching for candidate pairs will be performed at these specific timestamps only. If the temporal span between two successive checkpoints does not exceed the minimal duration threshold $\delta$, we can ensure no false negatives, since any qualifying pair starting at an intermediate timestamp between two checkpoints will surely be detected at least on the second one. Figure \ref{fig:checkpoints} shows an example for a set of time series (checkpoints placed every $\delta=5$ timestamps).
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/checkpoints.png}
     \caption{Checkpoints placed every $\delta$ timestamps.}
@@ -104,10 +104,10 @@ Let the interval between successive checkpoints not exceed $\delta$. Considering
 \end{mylemma}
 
 
-\begin{figure}[!t]
+\begin{figure}[!tb]
  \centering
- \subfloat[Pair with a starting point before $t'$.]{\includegraphics[width=0.43\textwidth]{figures/proofLeft.png}\label{fig:proof1}}
- \subfloat[Pair with an ending point after $t'$.]{\includegraphics[width=0.43\textwidth]{figures/proofRight.png}\label{fig:proof2}}
+ \subfloat[Pair with a starting point before $t'$.]{\includegraphics[width=0.5\textwidth]{figures/proofLeft.png}\label{fig:proof1}}
+ \subfloat[Pair with an ending point after $t'$.]{\includegraphics[width=0.5\textwidth]{figures/proofRight.png}\label{fig:proof2}}
  \caption{A qualifying pair will be detected on a checkpoint.}
  \label{fig:proof}
 \end{figure}
@@ -116,14 +116,14 @@ This lemma entails that it suffices to check for candidate pairs only at checkpo
 
 \paragraph{Improving placement of checkpoints} Depending on the dataset, the default checkpoint placement might yield an \textit{increased} number of candidate pairs, resulting in too many verifications. Intuitively, if the time series values at a specific timestamp $t'$ are placed in a more \textit{``scattered''} manner over the bins, less candidates would be generated. This is because the values of time series at $t'$ would differ from each other by more than $\epsilon$ and thus can be pruned as described in Section \ref{subsec:indexing}. Figure \ref{fig:opt1} depicts such a case of sub-optimal placement of checkpoints, where the second checkpoint is placed at a rather \textit{dense} area and as a result, six candidate pairs are considered. We can avoid this by shifting all checkpoints together either to the left or to the right, yet maintaining their temporal span every $\delta$. As shown in Figure \ref{fig:opt2}, all three checkpoints are collectively shifted to the left, avoiding the dense area and reducing the total number of candidate pairs. An extra checkpoint can be inserted before the first or after the last one, guaranteeing that there is no interval longer than $\delta$ without checkpoints.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/sub_opt.png}
     \caption{Sub-optimal checkpoint placement.}
     \label{fig:opt1}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/opt.png}
     \caption{Improved checkpoint placement.}
@@ -132,7 +132,7 @@ This lemma entails that it suffices to check for candidate pairs only at checkpo
 
 Clearly, the placement of the set $C$ of checkpoints influences the amount of candidate pairs. We wish to find the best such placement, which provides the least number of candidate pairs. The amount of candidates depends on the cardinality of the bins (i.e., the number of values in each one, as shown in Fig.~\ref{fig:index}) at any particular checkpoint $c \in C$. Given that $r$ is the total number of time series in the dataset (and hence the number of values at each checkpoint), we can identify the most populated bin at checkpoint $c$ by calculating the maximal density $\frac{\max\{\mathcal{B}_{c}\}}{r}$, where $\mathcal{B}_{c}$ represents the set of bin cardinalities at checkpoint $c$. Therefore, for a given configuration $C$ of checkpoints, we can estimate an overall cost $r$ by taking the sum of such maximal densities over all checkpoints, i.e.,  $g=\sum_{c \in C}{\frac{\max\{\mathcal{B}_{c}\}}{r}}$. The less this total cost, the smaller the cardinality per bin at each checkpoint and, thus, the less the candidates that will be generated. Consequently, we seek to find the minimum $g$. To do so, we shift all checkpoints together to the right, one timestamp at a time, we estimate ratio $g$ again and repeat $\delta$ times. This procedure is illustrated in Figure \ref{fig:heuristic1}, where the checkpoints symbolized with similar lines belong to the same set as we move them to the right in order to identify the best placement (indicated with the thickest vertical dashed lines).
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/heuristic.png}
     \caption{Best checkpoint placement (thick vertical lines).}

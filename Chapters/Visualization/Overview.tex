@@ -6,7 +6,7 @@ Time series is an inherently complex data type. Datasets containing time series 
 
 Consider the example illustrated in Figure~\ref{subfig:map}. When the user zooms the map into the red rectangle, the visualization application should identify, summarize and present the two patterns (shown in blue and green color) appearing therein. For such requests that inherently combine spatial filters with time series analysis, it is inefficient to evaluate each predicate separately, e.g., apply a spatial filter on the time series of a large dataset and then calculate summaries of the candidates, or vice versa. The same stands for the case of exploration on the time series domain, as depicted in Figure~\ref{subfig:timebox}. Consider a user drawing a {\em timebox} (i.e., a rectangle in the time series domain) or zooming in the yellow part. The application should identify the time series that are fully contained within that filter area, i.e., their values along the specified time range fall within the value range (both ranges shown in orange in Figure~\ref{subfig:timebox}), and then provide an informative summary comprising aggregate spatial information to avoid cluttering the map.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \subfloat[Exploring time series patterns in a {\em spatial region}.] {\includegraphics[width=0.375\textwidth]{figures/map2.pdf}\label{subfig:map}}
  \subfloat[Exploring time series in a {\em timebox} of interest.]{\includegraphics[width=0.45\textwidth]{figures/timebox.png}\label{subfig:timebox}}\
@@ -20,7 +20,7 @@ In this chapter, we propose two geolocated time series summarization approaches 
 
 The main difference among the two methods lies in the time series part of the summary. The bundle summary consists of sets of MBTS, an example of which is depicted in Figure~\ref{subfig:bundle}. An MBTS is a band with upper and lower bounds that encloses all time series of a set, providing with a notion of a range of the time series values throughout the time axis. On the other hand, the tile map summary (Figure~\ref{subfig:tile_map}) of a set of time series indicates (using a corresponding shading), the density of the time series points at each tile of a partitioning of the domain, obtained by discretizing the time and value axes. This way, it avoids overplotting that would be caused by outputting a large number of resulting time series and provides a notion of how the values of the time series are distributed across time.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
  \centering
  \subfloat[Bundle summary.]{\includegraphics[width=0.45\textwidth]{figures/bounds_tsr.png}\label{subfig:bundle}}
  \subfloat[Tile map summary.]{\includegraphics[width=0.45\textwidth]{figures/tile_map.png}\label{subfig:tile_map}}\

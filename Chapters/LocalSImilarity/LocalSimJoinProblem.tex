@@ -19,7 +19,7 @@ Given a set of $r$ co-evolving time series $\mathcal{T}=\{T_1,T_2,...,T_r\}$ of 
 
 For example, in Figure~\ref{fig:sim_join}, the detected pairs for specified $\epsilon$ and $\delta$ would be the locally similar time series within grey ribbons. Since two time series might be locally similar in more than one intervals, their matching subsequences are considered as two different pairs, one for each interval. For instance, in Figure~\ref{fig:sim_join} the green and red time series yield two matching pairs in different time intervals.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/sim_join.png}
     \caption{Pair discovery over a set of time series.}
@@ -39,7 +39,7 @@ Given a set of co-evolving time series $\mathcal{T}=\{T_1,T_2,...,T_r\}$ of equa
 
 An illustration of the above problem is shown in Figure \ref{fig:bundle_disc}. Each grey band covers the subsequences of at least $\mu=3$ time series that constitute a bundle. These subsequences are pairwise locally similar for a specified distance $\epsilon$ and duration $\delta$.
 
-\begin{figure}[tb]
+\begin{figure}[!tb]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/bundle_disc.png}
     \caption{Bundle discovery over a set of time series.}

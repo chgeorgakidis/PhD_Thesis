@@ -1,4 +1,4 @@
-% !TEX root = ThesisGchatzi.tex
+% !TEX root = ../../ThesisGchatzi.tex
 
 \section{Experimental Evaluation}
 \label{sec:knn_experiment}
@@ -81,6 +81,7 @@ The unified version implemented with Spark is significantly faster than the tota
 \centering
 \caption{Wall-clock completion time}
 \label{table1}
+\begin{small}
 \begin{tabular}{l|c|c|c|c||c}
 \multicolumn{1}{c|}{\multirow{2}{*}{Version}} & \multicolumn{4}{c||}{3 Sessions}             & 1 Session  \\ \cline{2-6} 
 \multicolumn{1}{c|}{}                         & 1st      & 2nd      & 3rd      & Total    & Total    \\ \hline
@@ -89,6 +90,7 @@ S-$k$NN                                         & 07m 12sec & 29m 15sec & 03m 01
 F-z$k$NN                                         & N/A & N/A & N/A & N/A & 46m 09sec \\ \hline
 H-z$k$NNJ                                       & 06m 00sec & 31m 19sec & 05m 54sec & 43m 13sec & N/A     
 \end{tabular}
+\end{small}
 \end{table}
 
 It should be noted that the results do not suggest that Flink is superior to the other distributed processing engines. The comparison is limited to the current FML-$k$NN's core algorithm and the implementation and experimental setting are as fair as possible, considering the engines' different operational support. It proves, however, that our algorithm performs significantly better with Flink and supports our choice to use it as an underlying execution environment.
@@ -97,7 +99,7 @@ It should be noted that the results do not suggest that Flink is superior to the
 \label{subsubsec:scalability}
 The various implementations were also evaluated in terms of scalability. Figure~\ref{figure6} shows the way each version scales in terms of completion time for subsets of the synthetic dataset of different size, using the same 10\%--90\% testing--training split scheme. The subset sizes varied from 10M (1M testing--9M training), to 100M (10M testing--90M training). As illustrated in the figure, the FML-$k$NN implementations exhibit similar performance and scale better as the dataset's size increases. However, the unified version, i.e., the one used at FML-$k$NN framework, has the advantage of not requiring user input and session initialization between the algorithm's stages. Flink's pipelined execution advantages are once again apparent if we compare the scalability performance of all the three-sessions implementations: The I/O HDFS operations cause the Spark and Hadoop versions to scale significantly worse than Flink, which performs similarly to the unified version. Finally, due to the aforementioned dataset propagation, F-z$k$NN scales worse than all the implementations.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
 	\centering
 	\includegraphics[width=0.65\textwidth]{figures/figure6.pdf}
 	\caption{Scalability comparison for 10\%--90\% split.}
@@ -106,7 +108,7 @@ The various implementations were also evaluated in terms of scalability. Figure~
 
 We have executed the algorithm using the 100M synthetic dataset for different split schemes, more specifically for 10\%--90\%,  30\%--70\%, 50\%--50\%, 70\%--30\% and 90\%--10\% testing--training. The results are depicted in Figure~\ref{figure7}. FML-$k$NN performs better in all cases. Due to the fact that the CPU cost of all methods similarly depends on the size of $R$ and $S$ datasets (please refer to Section~\ref{par:cost}), there are no large variations between the differences in the performance among all the implementations, and for all split cases. More time is required to finish execution as the size of the $R$ dataset is increased, due to the fact that the communication cost more heavily depends on the size of the $R$ dataset. However, this is compensated in each split case by the reduced size of dataset $S$, causing the execution time to be increased in a similar to logarithmic manner.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
 	\centering
 	\includegraphics[width=0.75\textwidth]{figures/figure7.pdf}
 	\caption{Wall-clock completion time for different split sizes.}
@@ -163,6 +165,7 @@ FML-$k$NN supports three SFC-based solutions for reducing the dimensionality of 
 \centering
 \caption{Space Filling Curves' performance.}
 \label{table2}
+\begin{small}
 \resizebox{\columnwidth}{!}{
 \begin{tabular}{c|c|c|c||c|c|c}
 \multirow{2}{*}{Curve}                    & \multicolumn{3}{c||}{Classification}    & \multicolumn{3}{c}{Regression}               \\ \cline{2-7} 
@@ -171,6 +174,7 @@ FML-$k$NN supports three SFC-based solutions for reducing the dimensionality of 
 \multicolumn{1}{l|}{Hilbert Curve}   & 70.54\%    & 0.78      & 1m 32sec        & 18.69 & 0.66                & 1m 15sec        \\ \hline
 \multicolumn{1}{l|}{Gray-code Curve} & 70.4\%     & 0.777     & 1m 25ec         & 18.81 & 0.64                & 1m 5sec        
 \end{tabular}}
+\end{small}
 \end{table}
 
 All three SFCs demonstrate similar performance in all aspects. Hilbert curve scores higher in all metrics as expected, however only slightly. Consequently, we chose the $z$-order curve for this case study, as it exhibits better time performance due to its decreased calculation complexity.
@@ -181,7 +185,7 @@ The classifier correctly predicted the 74.54\% (F-Measure: 0.81) of the testing 
 
 Figure~\ref{figure8} shows four users' consumption prediction versus the actual one, during four different days. The prediction for user \#4 was close to reality. The results seem to follow the real values, but are not able to properly follow the observed ones. This indicates that it is rather difficult to accurately predict a single user's future water consumption, due to possible unforeseen or random events during a day, a fact which justifies the rather large RMSE score. For example, consumptions higher than 20 liters during an hour (e.g., user \#3 around 6:00) could indicate a shower event, while larger consumptions ($>$50 liters) over more than one hour could suggest usage of the washing machine or dish washer (e.g., user \#3 from 16:00 to 20:00), along with other activities. In order to assess the generalization of the results, we calculated the average RMSE of the hour and volume of the peak consumption during each day, as well as the average RMSE of the total water use per day, for all the predictions. The rather high errors, (8.89 hours, 28.9 liters and 132.23 liters respectively), confirm the previous observations regarding the difficulty in predicting random daily events. However, despite all the above, our algorithms' predictions are able to mostly follow the overall behavior during most days (e.g., users \#3 and \#1). 
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
 	\centering
 	\includegraphics[width=0.75\textwidth]{figures/figure8.pdf}
 	\caption{Personalised hourly water consumption prediction.}	
@@ -190,7 +194,7 @@ Figure~\ref{figure8} shows four users' consumption prediction versus the actual 
 
 The results are particularly interesting if we aggregate the total predicted consumption of all users during each hour. The two upper diagrams in Figure~\ref{figure9} illustrate this case for two different days. It is apparent that our algorithms' predictions are able to properly follow the real aggregated consumption during each hour. This indicates that the negative effect of the sudden/unusual/unforeseen events is lost when we attempt to predict the total hourly water consumption of a larger number of users. The two lower diagrams present the same prediction performed by feeding our algorithms with already aggregated hourly consumption data. While the pre-aggregated dataset's predictions appear to less diverge from the actual values in certain points, the non-aggregated results are smoother and better assemble the actual overall behavior. This is due to the fact that the non-aggregated dataset also contains user-specific features and is thus able to perform predictions based on user similarity, thus, yielding more accurate predictions.
 
-\begin{figure}[!ht]
+\begin{figure}[!tb]
 	\centering
 	\includegraphics[width=0.75\textwidth]{figures/figure9.pdf}
 	\caption{Aggregated hourly water consumption prediction.}
@@ -213,9 +217,9 @@ We ran the probabilistic classifier in order to perform binary classification of
 \label{par:res2}
 The results obtained by the classification are illustrated in Figure~\ref{figure10}. The classifier achieved cross-validation accuracy of 78.6\%, 64.7\% and 61.5\% for sex, age and income prediction respectively. Despite the fact that a larger dataset would generate more confident results, it is safe to conclude to that predicting the age and income of a shower-taker based solely on her showers is a non-trivial task. On the other hand, sex is easier to predict as it directly affects the actions of a person during a shower.
 
- \begin{figure}[!ht]
+ \begin{figure}[!tb]
  	\centering
- 	\includegraphics[width=0.75\textwidth]{figures/figure10.pdf}
+ 	\includegraphics[width=0.65\textwidth]{figures/figure10.pdf}
  	\caption{Cross-validation accuracy for sex, age and income prediction.}	
  	\label{figure10}
  \end{figure}
