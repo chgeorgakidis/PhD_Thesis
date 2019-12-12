@@ -9,7 +9,7 @@ Furthermore, as the ubiquitous generation of information governs more and more a
 
 In the following sections, we outline related and state-of-the-art work on the above fields. More specifically, in Section~\ref{sec:ts_index_query_explore}, we discuss existing approaches for indexing, querying and visual exploration of time series and other types of data. In Section~\ref{sec:ts_search}, we outline related work on similarity search applied on time series data. Finally, Section~\ref{sec:knn_ml}, presents existing scalable approaches on $k$-Nearest Neighbors and dimensionality reduction.
 
-\section{Time Series Indexing, Querying and Visual Exploration}
+\section{Time Series Indexing and Visual Exploration}
 \label{sec:ts_index_query_explore}
 
 \paragraph{Spatio-Textual Indices.} There is an increasing amount of spatio-textual objects, e.g., Points of Interest (PoI) with textual descriptions, geotagged tweets or posts in social media, etc. This has motivated research on hybrid spatial-keyword queries combining location-based predicates with keyword search. Main query types include the \emph{Boolean Range Query}, which retrieves all objects that contain a given set of keywords and are located within a specified spatial range; the \emph{Boolean $k$NN Query}, which returns the $k$ nearest objects to a specific location and contain the given keywords; and the \emph{Top-$k$ $k$NN Query}, which finds the top-$k$ objects according to an objective function that assigns hybrid scores to objects based on both their keyword similarity and spatial proximity to the query object \cite{chen2013pvldb}.
@@ -32,8 +32,9 @@ dist_{SAX}(T_w, T'_w) =\sqrt{\frac{n}{w}} \sqrt{\sum_{j=1}^{w} d^2(t_j, t'_j) } 
 
 \begin{figure}[tb]
  \centering
- \subfloat[SAX of a time series]{\includegraphics[width=0.4\textwidth]{figures/sax2.png}\label{subfig:isax_representation}}
- \subfloat[MBTS for two sets of time series]{\includegraphics[width=0.5\textwidth]{figures/bounds_ctsr.png}\label{fig:example_bundle}}
+ \subfloat[SAX of a time series]{\includegraphics[width=0.3\textwidth]{figures/sax2.png}\label{subfig:isax_representation}}
+ \qquad
+ \subfloat[MBTS for two sets of time series]{\includegraphics[width=0.4\textwidth]{figures/bounds_ctsr.png}\label{fig:example_bundle}}
 \caption{SAX and MBTS representations over time series.}
 \label{fig:isax_example}
 \end{figure}
@@ -44,7 +45,7 @@ The first attempt to leverage the potential of the SAX was presented in \cite{sh
 
 \begin{figure}[tb]
  \centering
- \includegraphics[width=\textwidth]{figures/isax_tree2.png}
+ \includegraphics[width=0.9\textwidth]{figures/isax_tree2.png}
  \caption{\isax index over time series.}
  \label{fig:isaxtree}
 \end{figure}

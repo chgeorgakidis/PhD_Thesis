@@ -41,7 +41,7 @@ Given a set of time series $\mathcal{T}$, its MBTS consists of an \emph{upper bo
 \begin{figure}[!tb]
  \centering
  \subfloat[MBTS in \tsr]{\includegraphics[width=0.3\textwidth]{figures/bounds_tsr.png}\label{subfig:tsr_mbts}}\hspace{8pt}
- \subfloat[Distance bounds with MBTS]{\includegraphics[width=0.3\textwidth]{figures/bounds_mindst.png}\label{subfig:mbts_bounds}}\hspace{8pt}
+ \subfloat[Bound with MBTS]{\includegraphics[width=0.3\textwidth]{figures/bounds_mindst.png}\label{subfig:mbts_bounds}}\hspace{8pt}
  \subfloat[MBTS in \btsr]{\includegraphics[width=0.3\textwidth]{figures/bounds_ctsr.png}\label{subfig:btsr_mbts}}
 \caption{Examples illustrating the time series bounds and pruning in \tsr and \btsr.}
 \label{fig:example_bounds}
@@ -107,7 +107,7 @@ We define a {\em hybrid distance} measure $dist_h(T, T')$ between two geolocated
  \label{eq:dist_h}
 \end{equation}
 
-Accordingly, the hybrid similarity (distance) between two geolocated time series $T$ and $T'$ is equal to their standard time series similarity (distance) if they are located at the same position, and it gradually decreases (respectively, increases) if one is placed farther apart from the other. From Equations \ref{eq:sim_h} and \ref{eq:dist_h} we can observe that hybrid distance $dist_h(T_q, T)$ is monotone with respect both to $dist_{sp}(T_q, T)$ and $dist_{ts}(T_q, T)$. This implies that a minimum hybrid distance bound $mindist_h(T_q, N)$ for the contents of a given node $N$ can be similarly established by combining the individual bounds $mindist_{sp}\\(T_q, N)$ and $mindist_{ts}(T_q, N)$, i.e.:
+Accordingly, the hybrid similarity (distance) between two geolocated time series $T$ and $T'$ is equal to their standard time series similarity (distance) if they are located at the same position, and it gradually decreases (respectively, increases) if one is placed farther apart from the other. From Equations \ref{eq:sim_h} and \ref{eq:dist_h} we can observe that hybrid distance $dist_h(T_q, T)$ is monotone with respect both to $dist_{sp}(T_q, T)$ and $dist_{ts}(T_q, T)$. This implies that a minimum hybrid distance bound $mindist_h(T_q, N)$ for the contents of a given node $N$ can be similarly established by combining the individual bounds $mindist_{sp}(T_q, N)$ and $mindist_{ts}(T_q, N)$, i.e.:
 
 \begin{equation}
 mindist_h(T_q, N) = 1 - (1 - mindist_{ts}(T_q, N)) \; e^{- \gamma \; mindist_{sp}(T_q, N)}
@@ -130,7 +130,7 @@ The \btsr index is built similarly to the \tsr index. To construct the time seri
 
 \begin{figure}[!tb]
  \centering
- \includegraphics[width=0.65\textwidth]{figures/btsr_tree.png}
+ \includegraphics[width=0.4\textwidth]{figures/btsr_tree.png}
  \caption{An example of a \btsr index.}
  \label{fig:btsr_tree}
 \end{figure}

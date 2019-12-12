@@ -16,12 +16,15 @@
 %\usepackage[utf8]{inputenc}
 \usepackage{ragged2e}
 
+\usepackage{letter}
+
 \usepackage{amsmath,amsthm}
 \usepackage{amsfonts}
 \usepackage{mathtools}
 \usepackage{fixmath}
 \usepackage[colorlinks,linkcolor=blue,linktocpage]{hyperref}
 \usepackage[toctitles]{titlesec}
+\usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{tabularx}
 \usepackage{booktabs}
@@ -89,7 +92,7 @@
 \newcommand{\base}{\mbox{SimJoinMR}\xspace}
 \newcommand{\sbtsr}{\mbox{\texorpdfstring{$\mathcal{S}$}BBTSR-tree}\xspace}
 \renewcommand{\l}{\ell}
-\renewcommand{\baselinestretch}{.97}
+\renewcommand{\baselinestretch}{1.1}
 \renewcommand{\^}[1]{\ensuremath{\mathcal{#1}}}
 \renewcommand{\^}[1]{\ensuremath{\mathcal{#1}}}
 \setlength{\textheight}{23cm}
@@ -128,7 +131,9 @@
 \import{.}{Abstract}
 \selectlanguage{english}
 
-\pagestyle{headings}
+\pagestyle{fancy}
+\fancyhead{} % Clears the standard fancy style header
+\fancyhead[CO]{\textsc{\nouppercase{\leftmark}}}
 \tableofcontents
 \listoffigures
 
