@@ -1,0 +1,12 @@
+% !TEX root = ThesisGchatzi.tex
+
+\graphicspath{{Papers/SSTD2019/}{Papers/SIGSpatial2019/}}
+
+\section{Summary}
+\label{sec:concl_local_sim}
+
+In this chapter, we addressed the problems of pair and bundle discovery over co-evolving time series, according to their local similarity. We introduced two efficient algorithms for pair and bundle discovery that utilize checkpoints appropriately placed across the time axis in order to aggressively prune the search space and avoid expensive exhaustive search at each timestamp. Our methods successfully detect locally similar subsequences of co-evolving time series, as demonstrated in our experimental evaluation over real-world and synthetic data. Also, they were orders of magnitude faster compared to baseline methods that apply a sweep line approach, confirming their effectiveness in pair and bundle discovery.
+
+Furthermore, we have studied three variants of hybrid queries on geolocated time series, involving both range and top-$k$ search, and combining spatial distance with local time series similarity. The latter allows to measure similarity of time series over subsequences instead of their entire length, and thus enables the identification of more fine-grained trends and patterns. The queries are evaluated by hybrid index structures, in order to allow for simultaneous pruning by both criteria. We first discuss query evaluation using the previously proposed \btsr, and then we further extend it to derive the \sbtsr which exhibits even better performance, by using temporal segmentation of time series to derive tighter bounds. Our evaluation against several real-world datasets has shown that \sbtsr can compute results much faster for all query variants.
+
+In the following chapter, we present our distributed machine learning framework for fast and efficient classification and regression, using an optimized parallelization approach of the $k$-Nearest Neighbors joins algorithm.

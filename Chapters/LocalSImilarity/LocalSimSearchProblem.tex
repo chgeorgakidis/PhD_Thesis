@@ -1,0 +1,24 @@
+% !TEX root = ../../ThesisGchatzi.tex
+
+\subsection{Problem Definition}
+\label{subsec:local_sim_search_problem}
+
+\graphicspath{{Papers/SSTD2019/}{Papers/SIGSpatial2019/}}
+
+We first define the local similarity score between time series, and then present the query variants we consider in this section.
+
+\begin{mydefinition}[Local Similarity Score]
+The {\em local similarity score} $\sigma$ between two time series $T$ and $T'$ is the maximum count of consecutive timestamps during which the respective values of $T$ and $T'$ do not differ by more than a given margin $\epsilon$, i.e., $\sigma(T, T', \epsilon) = |I_{max}|$, where $I_{max}$ is the longest consecutive time interval $I$ such that $\forall i \in I, |T.v_{i} - T'.v_{i}| \leq \epsilon$.
+\end{mydefinition}
+
+Our goal is to efficiently support hybrid queries on geolocated time series that retrieve the results based both on spatial proximity and local similarity. Specifically, we focus on the following types of queries (hereafter referred to as \textit{LS-queries}):
+
+\begin{itemize}
+    \item $Q_{rr}(T_q, \rho, \epsilon, \delta)$: Given a geolocated time series $T_q$, retrieve every geolocated time series $T$ such that $T$ is located within range $\rho$ from $T_q$, i.e., $dist_{sp}(T_q, T) \leq \rho$ and has local similarity score against $T_q$ at least $\delta$, i.e., $\sigma(T_q, T, \epsilon) \geq \delta$.
+    \item $Q_{kr}(T_q, k, \epsilon, \delta)$: Given a geolocated time series $T_q$, retrieve the spatial $k$-nearest neighbors to $T_q$ that also have local similarity score against $T_q$ at least $\delta$.
+    \item $Q_{rk}(T_q, \rho, \epsilon, k)$: Given a geolocated time series $T_q$, retrieve the top-$k$ geolocated time series that have the highest local similarity score against $T_q$ with respect to $\epsilon$ and are located within range $\rho$ from $T_q$.
+\end{itemize}
+
+\begin{myexample}
+ Figure \ref{fig:example_query} depicts an example of the $Q_{rr}(T_q, \rho, \epsilon, \delta)$ query. Given the geolocated time series $T_q$ as query, we seek the spatially close ones (i.e., within a circle of radius $\rho$) that are also locally similar within margin $\epsilon$ for at least $\delta$ timestamps. In this example, despite five geolocated time series being within range, only $T_2$ and $T_7$ qualify for the final result, since these are the ones that are also locally similar for at least one time interval of length at least $\delta$.
+\end{myexample}
